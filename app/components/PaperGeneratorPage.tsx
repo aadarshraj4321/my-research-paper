@@ -15,8 +15,7 @@ export default function PaperGeneratorPage() {
     citationStyle: 'ieee',
     sections: 5,
     includeGraphs: 'no',
-    minimumWords: 2000,
-    institution: ''
+    minimumWords: 2000
   });
 
   const handleGenerate = async (data: FormState) => {

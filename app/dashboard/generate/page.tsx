@@ -1893,6 +1893,182 @@
 
 
 
+// "use client";
+// import React, { useState, FormEvent } from "react";
+// import { useToast } from "@/hooks/use-toast";
+// import { Card } from "@/components/ui/card";
+// import { FormState } from "@/app/types/paper";
+// import ResearchForm from "@/app/components/ResearchForm";
+// import PaperDisplay from "@/app/components/PaperDisplay";
+// import Image from 'next/image';
+// import Link from 'next/link';
+// import { Button } from '@/components/ui/button';
+
+// // Header Component
+// const Header = () => {
+//   return (
+//     <header className="bg-slate-800 border-b shadow-sm">
+//       <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+//         {/* Logo and Brand Name */}
+//         <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+//           <Image
+//             src="/logo.png" // Path to your logo in the public folder
+//             alt="ResearchAI Logo"
+//             width={40} // Adjust the width as needed
+//             height={40} // Adjust the height as needed
+//             className="rounded-lg"
+//           />
+//           <span className="text-2xl font-semibold text-white">
+//             MyResearchPaper
+//           </span>
+//         </Link>
+
+//         {/* Home Button */}
+//         <Link href="/">
+//           <Button
+//             variant="ghost"
+//             className="text-white hover:bg-slate-700/50 hover:text-white transition-all"
+//           >
+//             Home
+//           </Button>
+//         </Link>
+//       </nav>
+//     </header>
+//   );
+// };
+
+// export default function GeneratePage(): React.ReactElement {
+//   const { toast } = useToast();
+
+//   const [formState, setFormState] = useState<FormState>({
+//     topic: "",
+//     authorName: "",
+//     citationStyle: "ieee",
+//     sections: 5,
+//     includeGraphs: "no",
+//     minimumWords: 2000,
+//   });
+//   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+//   const [fullContent, setFullContent] = useState<string>("");
+
+//   const handleGenerate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+//     e.preventDefault();
+//     setIsGenerating(true);
+
+//     try {
+//       const response = await fetch("/api/generate-paper", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           ...formState,
+//           customizations: {
+//             sections: formState.sections,
+//             includeGraphs: formState.includeGraphs === "yes",
+//             minimumWords: formState.minimumWords,
+//           },
+//         }),
+//       });
+
+//       if (!response.ok) throw new Error("Generation failed");
+
+//       const data = await response.json();
+//       setFullContent(data.fullContent);
+
+//       toast({
+//         title: "Success!",
+//         description: "Your research paper has been generated.",
+//       });
+//     } catch (error) {
+//       console.log(error);
+//       toast({
+//         title: "Error",
+//         description: "Failed to generate paper. Please try again.",
+//         variant: "destructive",
+//       });
+//     } finally {
+//       setIsGenerating(false);
+//     }
+//   };
+
+//   const handleInputChange = (field: keyof FormState, value: string | number): void => {
+//     setFormState((prev) => ({
+//       ...prev,
+//       [field]: value,
+//     }));
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gray-50">
+//       {/* Header */}
+//       <Header />
+
+//       <div className="container mx-auto px-4 py-8">
+//         <div className="max-w-7xl mx-auto">
+//           {/* Page Header */}
+//           <div className="flex flex-col items-center mb-12">
+//             {/* Animated Gradient Text */}
+//             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent animate-gradient mb-4">
+//               My Research Paper
+//             </h1>
+
+//             {/* Interactive Subtitle */}
+//             <p className="text-xl text-gray-700 hover:text-gray-900 transition-colors duration-300">
+//               Precision Research Paper Writing with AI Assistance
+//             </p>
+
+//             {/* Decorative Animated Line */}
+//             <div className="mt-4 w-24 h-1.5 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full animate-pulse" />
+//           </div>
+
+//           {/* Grid Layout for Form and Paper Display */}
+//           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+//             {/* Left Column: Research Form */}
+//             <div className="lg:col-span-4">
+//               <div className="sticky top-8">
+//                 <ResearchForm
+//                   formState={formState}
+//                   isGenerating={isGenerating}
+//                   onSubmit={handleGenerate}
+//                   onInputChange={handleInputChange}
+//                 />
+//               </div>
+//             </div>
+
+//             {/* Right Column: Generated Paper Display */}
+//             <div className="lg:col-span-8">
+//               <Card className="bg-white rounded-xl shadow-lg border border-gray-100">
+//                 <PaperDisplay
+//                   content={fullContent}
+//                   citationStyle={formState.citationStyle}
+//                   authorName={formState.authorName}
+//                   isGenerating={isGenerating}
+//                 />
+//                 {/* Optional: Download Buttons */}
+//                 {/* {fullContent && (
+//                   <div className="p-4">
+//                     <DownloadButtons content={fullContent} />
+//                   </div>
+//                 )} */}
+//               </Card>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 import React, { useState, FormEvent } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -1909,13 +2085,12 @@ const Header = () => {
   return (
     <header className="bg-slate-800 border-b shadow-sm">
       <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
-        {/* Logo and Brand Name */}
         <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
           <Image
-            src="/logo.png" // Path to your logo in the public folder
+            src="/logo.png"
             alt="ResearchAI Logo"
-            width={40} // Adjust the width as needed
-            height={40} // Adjust the height as needed
+            width={40}
+            height={40}
             className="rounded-lg"
           />
           <span className="text-2xl font-semibold text-white">
@@ -1923,7 +2098,6 @@ const Header = () => {
           </span>
         </Link>
 
-        {/* Home Button */}
         <Link href="/">
           <Button
             variant="ghost"
@@ -1999,30 +2173,21 @@ export default function GeneratePage(): React.ReactElement {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <Header />
 
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-7xl mx-auto">
-          {/* Page Header */}
           <div className="flex flex-col items-center mb-12">
-            {/* Animated Gradient Text */}
             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent animate-gradient mb-4">
               My Research Paper
             </h1>
-
-            {/* Interactive Subtitle */}
             <p className="text-xl text-gray-700 hover:text-gray-900 transition-colors duration-300">
               Precision Research Paper Writing with AI Assistance
             </p>
-
-            {/* Decorative Animated Line */}
             <div className="mt-4 w-24 h-1.5 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full animate-pulse" />
           </div>
 
-          {/* Grid Layout for Form and Paper Display */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Left Column: Research Form */}
             <div className="lg:col-span-4">
               <div className="sticky top-8">
                 <ResearchForm
@@ -2034,21 +2199,13 @@ export default function GeneratePage(): React.ReactElement {
               </div>
             </div>
 
-            {/* Right Column: Generated Paper Display */}
             <div className="lg:col-span-8">
               <Card className="bg-white rounded-xl shadow-lg border border-gray-100">
                 <PaperDisplay
                   content={fullContent}
-                  citationStyle={formState.citationStyle}
-                  authorName={formState.authorName}
                   isGenerating={isGenerating}
+                  paperData={formState}
                 />
-                {/* Optional: Download Buttons */}
-                {/* {fullContent && (
-                  <div className="p-4">
-                    <DownloadButtons content={fullContent} />
-                  </div>
-                )} */}
               </Card>
             </div>
           </div>
