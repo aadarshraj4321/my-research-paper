@@ -393,7 +393,7 @@
 
 
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Header from './components/common/header';
