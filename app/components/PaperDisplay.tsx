@@ -113,7 +113,7 @@ export const PaperDisplay: React.FC<PaperDisplayProps> = ({
         {/* Render main content (excluding the abstract) */}
         <div className="space-y-8">
           {mainContent.map((section, index) => (
-            <PaperSection key={index} content={section} index={index} />
+            <PaperSection key={index} content={section} />
           ))}
         </div>
       </>
