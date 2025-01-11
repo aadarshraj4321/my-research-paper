@@ -101,7 +101,6 @@ export default function Header() {
           <span className="text-2xl font-semibold text-white">
             MyResearchPaper
           </span>
-         
         </Link>
 
         <div className="flex items-center space-x-6">
