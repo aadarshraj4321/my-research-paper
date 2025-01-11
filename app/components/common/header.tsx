@@ -68,17 +68,13 @@
 
 
 
-
-
 "use client";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
-import { useAuth } from '@/app/lib/hooks/useAuth';
 import Image from 'next/image';
 
 export default function Header() {
-  const { user, signOut } = useAuth(); // Use the hook to get the user state
   const [isMounted, setIsMounted] = useState(false);
 
   // Ensuring the component is only rendered after client-side rendering
@@ -108,42 +104,30 @@ export default function Header() {
         </Link>
 
         <div className="flex items-center space-x-6">
-          {user ? (
-            <>
-              <Link href="/generate">
-                <Button
-                  variant="ghost"
-                  className="text-white hover:bg-slate-700/50 hover:text-white transition-all"
-                >
-                  Generate Paper
-                </Button>
-              </Link>
-              <Button
-                variant="outline"
-                onClick={signOut}
-                className="text-white hover:bg-slate-700/50 hover:text-white transition-all"
-              >
-                Sign Out
-              </Button>
-            </>
-          ) : (
-            <>
-              {/* Temporarily removed Sign-In and Sign-Up buttons */}
-              {/* <Link href="/login">
-                <Button
-                  variant="ghost"
-                  className="text-white hover:bg-slate-700/50 hover:text-white transition-all"
-                >
-                  Login
-                </Button>
-              </Link>
-              <Link href="/signup">
-                <Button className="bg-indigo-600 text-white hover:bg-indigo-700 transition-all">
-                  Sign Up
-                </Button>
-              </Link> */}
-            </>
-          )}
+          {/* Always display the "Generate Paper" button */}
+          <Link href="/generate">
+            <Button
+              variant="ghost"
+              className="text-white hover:bg-slate-700/50 hover:text-white transition-all"
+            >
+              Generate Paper
+            </Button>
+          </Link>
+
+          {/* Optionally, you can add other buttons here */}
+          {/* <Link href="/login">
+            <Button
+              variant="ghost"
+              className="text-white hover:bg-slate-700/50 hover:text-white transition-all"
+            >
+              Login
+            </Button>
+          </Link>
+          <Link href="/signup">
+            <Button className="bg-indigo-600 text-white hover:bg-indigo-700 transition-all">
+              Sign Up
+            </Button>
+          </Link> */}
         </div>
       </nav>
     </header>
