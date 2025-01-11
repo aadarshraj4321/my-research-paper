@@ -529,7 +529,7 @@ export async function POST(
     }
 
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-8b' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.0-pro' });
 
     const prompt = `
       Create a detailed research paper on "${topic}" following these specifications:
