@@ -79,7 +79,7 @@ import { PaperDisplayProps } from '../types/paper';
 
 export const PaperDisplay: React.FC<PaperDisplayProps> = ({ 
   content, 
-  citationStyle, 
+  // citationStyle, 
   authorName, 
   isGenerating 
 }) => {
@@ -97,7 +97,7 @@ export const PaperDisplay: React.FC<PaperDisplayProps> = ({
 
     const sections = content.split('\n\n').filter(Boolean);
     const title = removeAsterisks(sections[0].replace(/^# /, '')); // Remove asterisks from title
-    const abstract = removeAsterisks(sections[1]); // Remove asterisks from abstract
+    //const abstract = removeAsterisks(sections[1]); // Remove asterisks from abstract
     const mainContent = sections.slice(2).map(section => removeAsterisks(section)); // Remove asterisks from main content
 
     return (

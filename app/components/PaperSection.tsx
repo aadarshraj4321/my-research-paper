@@ -206,10 +206,9 @@ import ReactMarkdown from 'react-markdown';
 
 interface PaperSectionProps {
   content: string;
-  index: number;
 }
 
-export const PaperSection: React.FC<PaperSectionProps> = ({ content, index }) => {
+export const PaperSection: React.FC<PaperSectionProps> = ({ content }) => {
   // Function to remove asterisks from content
   const removeAsterisks = (text: string): string => {
     return text.replace(/\*/g, ''); // Remove all asterisks

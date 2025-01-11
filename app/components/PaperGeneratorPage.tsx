@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, FormEvent } from 'react';
+import React, { useState } from 'react';
 import { FormState } from '../types/paper';
 import { useToast } from '@/hooks/use-toast';
 import PaperForm from './PaperForm';
@@ -48,6 +48,7 @@ export default function PaperGeneratorPage() {
         description: "Your research paper has been generated.",
       });
     } catch (error) {
+      console.log(error);
       toast({
         title: "Error",
         description: "Failed to generate paper. Please try again.",
