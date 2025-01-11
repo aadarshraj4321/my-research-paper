@@ -1,3 +1,4 @@
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -28,6 +29,13 @@ export default function Footer() {
                 <p className="text-sm">India, Asia, Earth</p>
               </li>
             </ul>
+          </div>
+
+          {/* Link to Terms and Conditions */}
+          <div>
+            <Link href="/terms" className="text-sm text-blue-600 hover:text-blue-800">
+              Terms and Conditions
+            </Link>
           </div>
         </div>
 
