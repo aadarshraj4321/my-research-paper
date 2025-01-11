@@ -149,6 +149,7 @@ import LoadingPaper from './LoadingPaper';
 import PaperHeader from './PaperHeader';
 import PaperSection from './PaperSection';
 import { PaperDisplayProps } from '../types/paper';
+import ExportButtons from './ExportButtons';
 
 export const PaperDisplay: React.FC<PaperDisplayProps> = ({ 
   content, 
@@ -200,11 +201,19 @@ export const PaperDisplay: React.FC<PaperDisplayProps> = ({
   };
 
   return (
+    // <ScrollArea className="h-[800px] w-full">
+    //   <div className="max-w-4xl mx-auto p-12">
+    //     {renderContent()}
+    //   </div>
+    // </ScrollArea>
     <ScrollArea className="h-[800px] w-full">
-      <div className="max-w-4xl mx-auto p-12">
-        {renderContent()}
-      </div>
-    </ScrollArea>
+    <div className="max-w-4xl mx-auto p-12">
+      {content && !isGenerating && (
+        <ExportButtons content={content} paperData={paperData} />
+      )}
+      {renderContent()}
+    </div>
+  </ScrollArea>
   );
 };
 
