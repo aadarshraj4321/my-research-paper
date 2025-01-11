@@ -1979,6 +1979,7 @@ export default function GeneratePage(): React.ReactElement {
         description: "Your research paper has been generated.",
       });
     } catch (error) {
+      console.log(error);
       toast({
         title: "Error",
         description: "Failed to generate paper. Please try again.",
