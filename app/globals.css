@@ -1,21 +1,94 @@
+/* ./styles/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+html {
+  background-color: #f0f0f0; /* Just an extra test to see if CSS is working */
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+
+
+
+.select-text {
+  text-align: justify; /* Ensures text is justified */
+  user-select: text; /* Allow text to be selected */
+}
+
+.text-gray-700 {
+  line-height: 1.8; /* Adjust line height for better spacing between sentences */
+}
+
+.prose {
+  margin-bottom: 1.5rem; /* Adds margin between sections */
+}
+
+
+
+
+
+
+
+/* Ensure Times New Roman font is used for the entire paper */
+
+body, .paper-content {
+  font-family: 'Times New Roman', Times, serif;
 }
 
 body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Make sure the content is justified */
+.select-text {
+  text-align: justify;
+  line-height: 1.8; /* Adjust line height for better spacing between sentences */
+  margin-bottom: 1.5rem; /* Add margin between sections */
+}
+
+/* List and bullet points styling */
+ul, ol {
+  margin-left: 2rem; /* Indent the lists */
+}
+
+li {
+  margin-bottom: 0.5rem; /* Add some space between list items */
+}
+
+/* Make paragraphs and sections easier to read */
+.prose p {
+  margin-bottom: 1rem; /* Add space between paragraphs */
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 1rem; /* Space below headings */
+  font-family: 'Times New Roman', Times, serif;
+  font-weight: bold;
+}
+
+/* Ensure images and figures are centered with some space around them */
+figure {
+  margin: 2rem auto;
+  text-align: center;
+}
+
+figcaption {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-top: 1rem;
+}
+
+/* Fix for quotes, code blocks, etc. */
+blockquote, code {
+  font-family: 'Times New Roman', Times, serif;
+  font-style: italic;
+}
+
+
+
+
+.justify-text {
+  text-align: justify;
 }

@@ -1,101 +1,244 @@
-import Image from "next/image";
+// import Image from "next/image";
 
-export default function Home() {
+// export default function Home() {
+//   return (
+//     <h1>Hola</h1>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+// // app/page.tsx
+
+// "use client";  // Add this at the top to make this component client-side
+
+// import Link from 'next/link';
+// import { Button } from '@/components/ui/button'; // Make sure this is styled correctly
+
+// export default function HomePage() {
+//   return (
+//     <div style={{ minHeight: 'calc(100vh - 4rem)', background: 'linear-gradient(to bottom, white, #f8fafc)' }}>
+//       <div style={{ maxWidth: '48rem', margin: 'auto', padding: '4rem 2rem' }}>
+//         <div style={{ maxWidth: '48rem', margin: 'auto', textAlign: 'center' }}>
+//           <h1 style={{ fontSize: '3rem', fontWeight: '700', color: '#1f2937', letterSpacing: '-0.02em' }}>
+//             Generate Research Papers with AI
+//           </h1>
+//           <p style={{ marginTop: '1.5rem', fontSize: '1.125rem', lineHeight: '1.75rem', color: '#4b5563' }}>
+//             Create professional research papers in minutes using advanced AI. Choose your topic,
+//             citation style, and let our platform do the heavy lifting.
+//           </p>
+//           <div style={{ marginTop: '2.5rem', display: 'flex', justifyContent: 'center', gap: '1.5rem' }}>
+//             <Link href="/generate">
+//               <Button
+//                 size="lg"
+//                 style={{
+//                   backgroundColor: '#3b82f6',
+//                   color: 'white',
+//                   padding: '0.75rem 1.5rem',
+//                   borderRadius: '0.375rem',
+//                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+//                   transition: 'transform 0.2s ease-in-out',
+//                 }}
+//                 onMouseOver={(e) => {
+//                   e.currentTarget.style.transform = 'scale(1.05)';
+//                 }}
+//                 onMouseOut={(e) => {
+//                   e.currentTarget.style.transform = 'scale(1)';
+//                 }}
+//                 onMouseDown={(e) => {
+//                   e.currentTarget.style.transform = 'scale(0.95)';
+//                 }}
+//                 onMouseUp={(e) => {
+//                   e.currentTarget.style.transform = 'scale(1)';
+//                 }}
+//               >
+//                 Start Generating
+//               </Button>
+//             </Link>
+//             <Link href="/login">
+//               <Button
+//                 variant="outline"
+//                 size="lg"
+//                 style={{
+//                   border: '2px solid #d1d5db',
+//                   color: '#374151',
+//                   padding: '0.75rem 1.5rem',
+//                   borderRadius: '0.375rem',
+//                   boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+//                   transition: 'transform 0.2s ease-in-out',
+//                 }}
+//                 onMouseOver={(e) => {
+//                   e.currentTarget.style.backgroundColor = '#f3f4f6';
+//                 }}
+//                 onMouseOut={(e) => {
+//                   e.currentTarget.style.backgroundColor = 'transparent';
+//                 }}
+//                 onMouseDown={(e) => {
+//                   e.currentTarget.style.transform = 'scale(0.95)';
+//                 }}
+//                 onMouseUp={(e) => {
+//                   e.currentTarget.style.transform = 'scale(1)';
+//                 }}
+//               >
+//                 Sign In
+//               </Button>
+//             </Link>
+//           </div>
+//         </div>
+
+//         {/* Features Section */}
+//         <div style={{ marginTop: '8rem', display: 'grid', gridTemplateColumns: 'repeat(1, 1fr)', gap: '2rem' }}>
+//           {features.map((feature, index) => (
+//             <div
+//               key={index}
+//               style={{
+//                 position: 'relative',
+//                 padding: '1.5rem',
+//                 backgroundColor: 'white',
+//                 borderRadius: '1rem',
+//                 boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+//                 border: '1px solid #e5e7eb',
+//                 transition: 'box-shadow 0.3s ease',
+//               }}
+//               onMouseOver={(e) => {
+//                 e.currentTarget.style.boxShadow = '0 8px 20px rgba(0, 0, 0, 0.15)';
+//               }}
+//               onMouseOut={(e) => {
+//                 e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.1)';
+//               }}
+//             >
+//               <dt style={{ fontSize: '1.125rem', fontWeight: '600', color: '#1f2937' }}>{feature.title}</dt>
+//               <dd style={{ marginTop: '0.5rem', color: '#4b5563' }}>{feature.description}</dd>
+//             </div>
+//           ))}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+// const features = [
+//   {
+//     title: 'Multiple Citation Styles',
+//     description: 'Support for IEEE, APA, MLA, and other popular citation formats.'
+//   },
+//   {
+//     title: 'AI-Powered Content',
+//     description: 'Leveraging advanced AI to generate high-quality research content.'
+//   },
+//   {
+//     title: 'Custom Formatting',
+//     description: 'Choose your preferred format and download as DOCX or PDF.'
+//   },
+// ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// app/page.tsx
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import Header from './components/common/header';
+import Footer from './components/common/footer';
+
+
+
+export default function HomePage() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-gray-50">
+      {/* Header */}
+      <Header />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <main className="flex-grow">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-5xl font-extrabold text-gray-900 sm:text-6xl leading-tight">
+            AI-Powered Research Writing Assistant
+            </h1>
+            <p className="mt-6 text-lg text-gray-600 leading-8">
+              Create professional research papers in minutes using advanced AI. Choose your topic,
+              citation style, and let our platform do the heavy lifting.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-x-6">
+              <Link href="/dashboard/generate">
+                <Button
+                  size="lg"
+                  className="bg-indigo-600 text-white py-3 px-8 rounded-lg shadow-lg hover:bg-indigo-700 transition-all transform hover:scale-105 active:scale-95"
+                >
+                  Start Generating
+                </Button>
+              </Link>
+              {/* <Link href="/login">
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-2 border-gray-300 text-gray-700 py-3 px-8 rounded-lg shadow-lg hover:bg-gray-100 hover:border-gray-400 transition-all transform hover:scale-105 active:scale-95"
+                >
+                  Sign In
+                </Button>
+              </Link> */}
+            </div>
+          </div>
+
+          {/* Features Section */}
+          <div className="mt-32 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {features.map((feature, index) => (
+              <div
+                key={index}
+                className="relative p-8 bg-white rounded-2xl shadow-xl border hover:shadow-2xl transition-all duration-300"
+              >
+                <dt className="text-lg font-semibold text-gray-900">{feature.title}</dt>
+                <dd className="mt-2 text-gray-600">{feature.description}</dd>
+              </div>
+            ))}
+          </div>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
+
+const features = [
+  {
+    title: 'Multiple Citation Styles',
+    description: 'Support for IEEE, APA, MLA, and other popular citation formats.'
+  },
+  {
+    title: 'AI-Powered Content',
+    description: 'Leveraging advanced AI to generate high-quality research content.'
+  },
+  {
+    title: 'Custom Formatting',
+    description: 'Choose your preferred format and download as DOCX or PDF.'
+  },
+];
+
+
+
+
+
