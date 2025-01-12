@@ -392,6 +392,320 @@
 
 
 
+// "use client";
+// import { useState } from 'react';
+// import Link from 'next/link';
+// import { Button } from '@/components/ui/button';
+// import Header from './components/common/header';
+// import Footer from './components/common/footer';
+// import { motion } from 'framer-motion';
+// import ParticleBackground from './components/ParticleBackground';
+// import { ArrowRight, Book, FileText, Layout } from 'lucide-react';
+
+// // Interactive Button Component
+// const AnimatedButton = () => {
+//   return (
+//     <Link href="/dashboard/generate">
+//       <motion.div
+//         className="relative inline-block"
+//         whileHover={{ scale: 1.05 }}
+//         whileTap={{ scale: 0.95 }}
+//       >
+//         <Button
+//           size="lg"
+//           className="group relative inline-flex items-center px-8 py-6 overflow-hidden rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
+//         >
+//           <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient"></span>
+//           <span className="relative flex items-center gap-3 text-white text-lg font-semibold">
+//             Start Generating
+//             <motion.span
+//               animate={{
+//                 x: [0, 5, 0],
+//                 transition: {
+//                   duration: 1.5,
+//                   repeat: Infinity,
+//                   ease: "easeInOut"
+//                 }
+//               }}
+//             >
+//               <ArrowRight className="w-6 h-6" />
+//             </motion.span>
+//           </span>
+//         </Button>
+//         <div className="absolute -inset-1 rounded-full blur-md bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
+//       </motion.div>
+//     </Link>
+//   );
+// };
+
+
+
+
+
+
+
+// // Mouse Background Effect Component
+// // const MouseBackground = () => {
+// //   useEffect(() => {
+// //     const canvas = document.getElementById('mouse-canvas') as HTMLCanvasElement;
+// //     if (!canvas) return;
+
+// //     const ctx = canvas.getContext('2d');
+// //     if (!ctx) return;
+
+// //     // Set canvas size
+// //     const setSize = () => {
+// //       canvas.width = window.innerWidth;
+// //       canvas.height = window.innerHeight;
+// //     };
+// //     setSize();
+// //     window.addEventListener('resize', setSize);
+
+// //     // Mouse position
+// //     let mouse = { x: 0, y: 0 };
+// //     let circles: Array<{ x: number; y: number; radius: number; opacity: number }> = [];
+
+// //     // Update mouse position
+// //     const handleMouseMove = (e: MouseEvent) => {
+// //       mouse.x = e.clientX;
+// //       mouse.y = e.clientY;
+      
+// //       // Add new circle
+// //       circles.push({
+// //         x: mouse.x,
+// //         y: mouse.y,
+// //         radius: 0,
+// //         opacity: 0.5
+// //       });
+      
+// //       // Limit number of circles
+// //       if (circles.length > 3) {
+// //         circles.shift();
+// //       }
+// //     };
+
+// //     window.addEventListener('mousemove', handleMouseMove);
+
+// //     // Animation loop
+// //     const animate = () => {
+// //       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+// //       circles.forEach((circle, i) => {
+// //         circle.radius += 2;
+// //         circle.opacity -= 0.01;
+        
+// //         if (circle.opacity > 0) {
+// //           ctx.beginPath();
+// //           ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+// //           ctx.fillStyle = `rgba(99, 102, 241, ${circle.opacity})`;
+// //           ctx.fill();
+// //         }
+// //       });
+
+// //       circles = circles.filter(circle => circle.opacity > 0);
+// //       requestAnimationFrame(animate);
+// //     };
+
+// //     animate();
+
+// //     return () => {
+// //       window.removeEventListener('resize', setSize);
+// //       window.removeEventListener('mousemove', handleMouseMove);
+// //     };
+// //   }, []);
+
+// //   return (
+// //     <canvas
+// //       id="mouse-canvas"
+// //       className="fixed inset-0 pointer-events-none z-0"
+// //       style={{ opacity: 0.6 }}
+// //     />
+// //   );
+// // };
+
+
+
+
+
+
+// const features = [
+//   {
+//     title: 'Multiple Citation Styles',
+//     description: 'Support for IEEE, APA, MLA, and other popular citation formats.',
+//     icon: <FileText className="w-6 h-6" />,
+//     color: 'from-blue-500 to-cyan-500'
+//   },
+//   {
+//     title: 'AI-Powered Content',
+//     description: 'Leveraging advanced AI to generate high-quality research content.',
+//     icon: <Book className="w-6 h-6" />,
+//     color: 'from-purple-500 to-pink-500'
+//   },
+//   {
+//     title: 'Custom Formatting',
+//     description: 'Choose your preferred format and download as DOCX or PDF.',
+//     icon: <Layout className="w-6 h-6" />,
+//     color: 'from-green-500 to-emerald-500'
+//   },
+// ];
+
+// export default function HomePage() {
+//   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
+
+//   return (
+//     <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
+//       {/* <MouseBackground /> */}
+//       <ParticleBackground />
+//       <div className="relative z-10">
+//         <Header />
+
+//         <main className="flex-grow">
+//           <div className="container mx-auto px-4 py-16">
+//             {/* Hero Section */}
+//             <motion.div 
+//               className="max-w-4xl mx-auto text-center"
+//               initial={{ opacity: 0, y: 30 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               transition={{ duration: 0.8 }}
+//             >
+//               <h1 className="text-6xl font-extrabold tracking-tight">
+//                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+//                   AI-Powered Research
+//                 </span>
+//                 <br />
+//                 <span className='text-white'>My Research Paper</span>
+//               </h1>
+              
+//               <motion.p 
+//                 className="mt-8 text-xl text-gray-400 leading-8"
+//                 initial={{ opacity: 0 }}
+//                 animate={{ opacity: 1 }}
+//                 transition={{ delay: 0.3, duration: 0.8 }}
+//               >
+//                 Create professional research papers in minutes using advanced AI. 
+//                 Choose your topic, citation style, and let our platform do the heavy lifting.
+//               </motion.p>
+
+//               <motion.div 
+//                 className="mt-12"
+//                 initial={{ opacity: 0, y: 20 }}
+//                 animate={{ opacity: 1, y: 0 }}
+//                 transition={{ delay: 0.5, duration: 0.8 }}
+//               >
+//                 <AnimatedButton />
+//               </motion.div>
+//             </motion.div>
+
+//             {/* Features Section */}
+//             <motion.div 
+//               className="mt-32 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+//               variants={{
+//                 hidden: { opacity: 0 },
+//                 show: {
+//                   opacity: 1,
+//                   transition: {
+//                     staggerChildren: 0.2
+//                   }
+//                 }
+//               }}
+//               initial="hidden"
+//               animate="show"
+//             >
+//               {features.map((feature, index) => (
+//                 <motion.div
+//                   key={index}
+//                   className={`relative p-8 rounded-2xl transition-all duration-300 cursor-pointer
+//                     ${hoveredFeature === index ? 'scale-105' : 'scale-100'}
+//                     bg-white shadow-lg hover:shadow-2xl`}
+//                   whileHover={{ y: -5 }}
+//                   variants={{
+//                     hidden: { opacity: 0, y: 20 },
+//                     show: { opacity: 1, y: 0 }
+//                   }}
+//                   onMouseEnter={() => setHoveredFeature(index)}
+//                   onMouseLeave={() => setHoveredFeature(null)}
+//                 >
+//                   <div className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-0 
+//                     ${hoveredFeature === index ? 'opacity-5' : ''} rounded-2xl transition-opacity duration-300`}
+//                   />
+                  
+//                   <div className="relative z-10">
+//                     <div className={`inline-block p-3 rounded-xl bg-gradient-to-r ${feature.color} text-white mb-4`}>
+//                       {feature.icon}
+//                     </div>
+//                     <dt className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</dt>
+//                     <dd className="text-gray-600 leading-relaxed">{feature.description}</dd>
+//                   </div>
+//                 </motion.div>
+//               ))}
+//             </motion.div>
+//           </div>
+//         </main>
+
+//         <Footer />
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 import { useState } from 'react';
 import Link from 'next/link';
@@ -442,92 +756,6 @@ const AnimatedButton = () => {
 
 
 
-
-
-// Mouse Background Effect Component
-// const MouseBackground = () => {
-//   useEffect(() => {
-//     const canvas = document.getElementById('mouse-canvas') as HTMLCanvasElement;
-//     if (!canvas) return;
-
-//     const ctx = canvas.getContext('2d');
-//     if (!ctx) return;
-
-//     // Set canvas size
-//     const setSize = () => {
-//       canvas.width = window.innerWidth;
-//       canvas.height = window.innerHeight;
-//     };
-//     setSize();
-//     window.addEventListener('resize', setSize);
-
-//     // Mouse position
-//     let mouse = { x: 0, y: 0 };
-//     let circles: Array<{ x: number; y: number; radius: number; opacity: number }> = [];
-
-//     // Update mouse position
-//     const handleMouseMove = (e: MouseEvent) => {
-//       mouse.x = e.clientX;
-//       mouse.y = e.clientY;
-      
-//       // Add new circle
-//       circles.push({
-//         x: mouse.x,
-//         y: mouse.y,
-//         radius: 0,
-//         opacity: 0.5
-//       });
-      
-//       // Limit number of circles
-//       if (circles.length > 3) {
-//         circles.shift();
-//       }
-//     };
-
-//     window.addEventListener('mousemove', handleMouseMove);
-
-//     // Animation loop
-//     const animate = () => {
-//       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-//       circles.forEach((circle, i) => {
-//         circle.radius += 2;
-//         circle.opacity -= 0.01;
-        
-//         if (circle.opacity > 0) {
-//           ctx.beginPath();
-//           ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
-//           ctx.fillStyle = `rgba(99, 102, 241, ${circle.opacity})`;
-//           ctx.fill();
-//         }
-//       });
-
-//       circles = circles.filter(circle => circle.opacity > 0);
-//       requestAnimationFrame(animate);
-//     };
-
-//     animate();
-
-//     return () => {
-//       window.removeEventListener('resize', setSize);
-//       window.removeEventListener('mousemove', handleMouseMove);
-//     };
-//   }, []);
-
-//   return (
-//     <canvas
-//       id="mouse-canvas"
-//       className="fixed inset-0 pointer-events-none z-0"
-//       style={{ opacity: 0.6 }}
-//     />
-//   );
-// };
-
-
-
-
-
-
 const features = [
   {
     title: 'Multiple Citation Styles',
@@ -549,12 +777,13 @@ const features = [
   },
 ];
 
+
+
 export default function HomePage() {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-slate-50 to-white relative overflow-hidden">
-      {/* <MouseBackground /> */}
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-gray-900 dark:to-gray-950 relative overflow-hidden">
       <ParticleBackground />
       <div className="relative z-10">
         <Header />
@@ -568,16 +797,16 @@ export default function HomePage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
             >
-              <h1 className="text-6xl font-extrabold tracking-tight">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
-                  AI-Powered Research
+              <h1 className="mt-10 text-6xl font-extrabold tracking-tight">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
+                   Transforming Research
                 </span>
                 <br />
-                <span className='text-white'>My Research Paper</span>
+                <span className="text-gray-900 dark:text-white">AI-Powered</span>
               </h1>
               
               <motion.p 
-                className="mt-8 text-xl text-gray-400 leading-8"
+                className="mt-8 text-xl text-gray-600 dark:text-gray-300 leading-8"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
@@ -616,7 +845,8 @@ export default function HomePage() {
                   key={index}
                   className={`relative p-8 rounded-2xl transition-all duration-300 cursor-pointer
                     ${hoveredFeature === index ? 'scale-105' : 'scale-100'}
-                    bg-white shadow-lg hover:shadow-2xl`}
+                    bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl
+                    dark:shadow-gray-900/50`}
                   whileHover={{ y: -5 }}
                   variants={{
                     hidden: { opacity: 0, y: 20 },
@@ -626,15 +856,20 @@ export default function HomePage() {
                   onMouseLeave={() => setHoveredFeature(null)}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-0 
-                    ${hoveredFeature === index ? 'opacity-5' : ''} rounded-2xl transition-opacity duration-300`}
+                    ${hoveredFeature === index ? 'opacity-5 dark:opacity-10' : ''} 
+                    rounded-2xl transition-opacity duration-300`}
                   />
                   
                   <div className="relative z-10">
                     <div className={`inline-block p-3 rounded-xl bg-gradient-to-r ${feature.color} text-white mb-4`}>
                       {feature.icon}
                     </div>
-                    <dt className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</dt>
-                    <dd className="text-gray-600 leading-relaxed">{feature.description}</dd>
+                    <dt className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+                      {feature.title}
+                    </dt>
+                    <dd className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                      {feature.description}
+                    </dd>
                   </div>
                 </motion.div>
               ))}
@@ -647,39 +882,3 @@ export default function HomePage() {
     </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

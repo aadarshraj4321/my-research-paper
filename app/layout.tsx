@@ -79,6 +79,7 @@
 // app/layout.tsx
 import './globals.css'; // Ensure this is correctly imported
 import type { Metadata } from "next";
+import { ThemeProvider } from './components/common/themeContext';
 
 export const metadata: Metadata = {
   title: "MyResearchPaper - AI-Powered Research Paper Generator",
@@ -149,7 +150,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <div className="min-h-screen flex flex-col">
-          {children}
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
         </div>
       </body>
     </html>

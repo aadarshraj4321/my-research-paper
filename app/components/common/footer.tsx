@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-600">
           {/* Company Info */}
           <div>
-            <h3 className="font-semibold text-xl mb-2">ResearchAI</h3>
+            <h3 className="font-semibold text-xl mb-2">MyResearchPaper</h3>
             <p className="text-sm">
               Revolutionizing research paper generation with artificial intelligence. Empowering researchers to save time and improve quality.
             </p>
