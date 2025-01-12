@@ -2407,7 +2407,7 @@ export default function GeneratePage(): React.ReactElement {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col items-center mb-12">
             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 text-center">
-              Research Paper Generator
+              My Research Paper
             </h1>
             <p className="text-xl text-gray-600 text-center max-w-2xl">
               Create professional research papers with AI assistance
