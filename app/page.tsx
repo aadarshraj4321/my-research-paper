@@ -731,7 +731,7 @@ const AnimatedButton = () => {
         >
           <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient"></span>
           <span className="relative flex items-center gap-3 text-white text-lg font-semibold">
-            Start Generating
+            Build Research
             <motion.span
               animate={{
                 x: [0, 5, 0],
