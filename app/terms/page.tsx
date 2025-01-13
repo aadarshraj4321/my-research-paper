@@ -246,7 +246,7 @@ const Terms = () => {
           {/* Platform Information */}
           <div className="p-6 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl">
             <p className="leading-relaxed">
-              This document is published in accordance with the provisions of Rule 3 (1) of the Information Technology (Intermediaries guidelines) Rules, 2011 that require publishing the rules and regulations, privacy policy, and Terms of Use for access or usage of domain name <span className="text-indigo-600 dark:text-indigo-400">https://www.myresearchpaper.in</span> ('Website'), including the related mobile site and mobile application (hereinafter referred to as 'Platform').
+              This document is published in accordance with the provisions of Rule 3 (1) of the Information Technology (Intermediaries guidelines) Rules, 2011 that require publishing the rules and regulations, privacy policy, and Terms of Use for access or usage of domain name <span className="text-indigo-600 dark:text-indigo-400">https://www.myresearchpaper.in</span> (&apos;Website&apos;), including the related mobile site and mobile application (hereinafter referred to as &apos;Platform&apos;).
             </p>
           </div>
 

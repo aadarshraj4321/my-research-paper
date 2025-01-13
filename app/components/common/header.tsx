@@ -228,12 +228,12 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
-import { Sun, Moon } from 'lucide-react';
-import { useTheme } from './themeContext';
+// import { Sun, Moon } from 'lucide-react';
+// import { useTheme } from './themeContext';
 
 export default function Header() {
   const [isMounted, setIsMounted] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  // const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     setIsMounted(true);
