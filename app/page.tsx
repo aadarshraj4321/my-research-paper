@@ -706,209 +706,15 @@
 
 
 
-// "use client";
-// import { useState } from 'react';
-// import Link from 'next/link';
-// import { Button } from '@/components/ui/button';
-// import Header from './components/common/header';
-// import Footer from './components/common/footer';
-// import { motion } from 'framer-motion';
-// import ParticleBackground from './components/ParticleBackground';
-// import { ArrowRight, Book, FileText, Layout } from 'lucide-react';
-
-// // Interactive Button Component
-// const AnimatedButton = () => {
-//   return (
-//     <Link href="/dashboard/generate">
-//       <motion.div
-//         className="relative inline-block"
-//         whileHover={{ scale: 1.05 }}
-//         whileTap={{ scale: 0.95 }}
-//       >
-//         <Button
-//           size="lg"
-//           className="group relative inline-flex items-center px-8 py-6 overflow-hidden rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700"
-//         >
-//           <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300 animate-gradient"></span>
-//           <span className="relative flex items-center gap-3 text-white text-lg font-semibold">
-//             Build Research
-//             <motion.span
-//               animate={{
-//                 x: [0, 5, 0],
-//                 transition: {
-//                   duration: 1.5,
-//                   repeat: Infinity,
-//                   ease: "easeInOut"
-//                 }
-//               }}
-//             >
-//               <ArrowRight className="w-6 h-6" />
-//             </motion.span>
-//           </span>
-//         </Button>
-//         <div className="absolute -inset-1 rounded-full blur-md bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
-//       </motion.div>
-//     </Link>
-//   );
-// };
-
-
-
-
-
-// const features = [
-//   {
-//     title: 'Multiple Citation Styles',
-//     description: 'Support for IEEE, APA, MLA, and other popular citation formats.',
-//     icon: <FileText className="w-6 h-6" />,
-//     color: 'from-blue-500 to-cyan-500'
-//   },
-//   {
-//     title: 'AI-Powered Content',
-//     description: 'Leveraging advanced AI to generate high-quality research content.',
-//     icon: <Book className="w-6 h-6" />,
-//     color: 'from-purple-500 to-pink-500'
-//   },
-//   {
-//     title: 'Custom Formatting',
-//     description: 'Choose your preferred format and download as DOCX or PDF.',
-//     icon: <Layout className="w-6 h-6" />,
-//     color: 'from-green-500 to-emerald-500'
-//   },
-// ];
-
-
-
-// export default function HomePage() {
-//   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
-
-//   return (
-//     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-gray-900 dark:to-gray-950 relative overflow-hidden">
-//       <ParticleBackground />
-//       <div className="relative z-10">
-//         <Header />
-
-        // <main className="flex-grow">
-        //   <div className="container mx-auto px-4 py-16">
-        //     {/* Hero Section */}
-        //     <motion.div 
-        //       className="max-w-4xl mx-auto text-center"
-        //       initial={{ opacity: 0, y: 30 }}
-        //       animate={{ opacity: 1, y: 0 }}
-        //       transition={{ duration: 0.8 }}
-        //     >
-        //       <h1 className="mt-10 text-6xl font-extrabold tracking-tight">
-        //         <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">
-        //            Transforming Research
-        //         </span>
-        //         <br />
-        //         <span className="text-gray-900 dark:text-white">AI-Powered</span>
-        //       </h1>
-              
-        //       <motion.p 
-        //         className="mt-8 text-xl text-gray-600 dark:text-gray-300 leading-8"
-        //         initial={{ opacity: 0 }}
-        //         animate={{ opacity: 1 }}
-        //         transition={{ delay: 0.3, duration: 0.8 }}
-        //       >
-        //         Create professional research papers in minutes using advanced AI. 
-        //         Choose your topic, citation style, and let our platform do the heavy lifting.
-        //       </motion.p>
-
-        //       <motion.div 
-        //         className="mt-12"
-        //         initial={{ opacity: 0, y: 20 }}
-        //         animate={{ opacity: 1, y: 0 }}
-        //         transition={{ delay: 0.5, duration: 0.8 }}
-        //       >
-        //         <AnimatedButton />
-        //       </motion.div>
-        //     </motion.div>
-
-        //     {/* Features Section */}
-        //     <motion.div 
-        //       className="mt-32 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
-        //       variants={{
-        //         hidden: { opacity: 0 },
-        //         show: {
-        //           opacity: 1,
-        //           transition: {
-        //             staggerChildren: 0.2
-        //           }
-        //         }
-        //       }}
-        //       initial="hidden"
-        //       animate="show"
-        //     >
-        //       {features.map((feature, index) => (
-        //         <motion.div
-        //           key={index}
-        //           className={`relative p-8 rounded-2xl transition-all duration-300 cursor-pointer
-        //             ${hoveredFeature === index ? 'scale-105' : 'scale-100'}
-        //             bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl
-        //             dark:shadow-gray-900/50`}
-        //           whileHover={{ y: -5 }}
-        //           variants={{
-        //             hidden: { opacity: 0, y: 20 },
-        //             show: { opacity: 1, y: 0 }
-        //           }}
-        //           onMouseEnter={() => setHoveredFeature(index)}
-        //           onMouseLeave={() => setHoveredFeature(null)}
-        //         >
-        //           <div className={`absolute inset-0 bg-gradient-to-r ${feature.color} opacity-0 
-        //             ${hoveredFeature === index ? 'opacity-5 dark:opacity-10' : ''} 
-        //             rounded-2xl transition-opacity duration-300`}
-        //           />
-                  
-        //           <div className="relative z-10">
-        //             <div className={`inline-block p-3 rounded-xl bg-gradient-to-r ${feature.color} text-white mb-4`}>
-        //               {feature.icon}
-        //             </div>
-        //             <dt className="text-xl font-semibold text-gray-900 dark:text-white mb-3">
-        //               {feature.title}
-        //             </dt>
-        //             <dd className="text-gray-600 dark:text-gray-300 leading-relaxed">
-        //               {feature.description}
-        //             </dd>
-        //           </div>
-        //         </motion.div>
-        //       ))}
-        //     </motion.div>
-        //   </div>
-        // </main>
-
-//         <Footer />
-//       </div>
-//     </div>
-//   );
-// }
-
-
-
-
-
-
-
-
-
-
-
-
-
 "use client";
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import Header from './components/common/header';
 import Footer from './components/common/footer';
 import { motion } from 'framer-motion';
 import ParticleBackground from './components/ParticleBackground';
-import { ArrowRight, Book, FileText, Layout, CheckCircle, Download, Share2 } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import { Card } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import PaperDisplay from '@/app/components/PaperDisplay';
-import { GeneratedPaperData } from "@/app/types/paper";
+import { ArrowRight, Book, FileText, Layout } from 'lucide-react';
 
 // Interactive Button Component
 const AnimatedButton = () => {
@@ -946,6 +752,10 @@ const AnimatedButton = () => {
   );
 };
 
+
+
+
+
 const features = [
   {
     title: 'Multiple Citation Styles',
@@ -967,107 +777,11 @@ const features = [
   },
 ];
 
-const SuccessContent = ({ paperData }: { paperData: GeneratedPaperData }) => {
-  const { toast } = useToast();
 
-  const handleDownload = () => {
-    toast({
-      title: "Download Started",
-      description: "Your paper is being downloaded as a PDF.",
-    });
-  };
-
-  const handleShare = () => {
-    const shareUrl = window.location.origin;
-    navigator.clipboard.writeText(shareUrl);
-    toast({
-      title: "Link Copied!",
-      description: "Share this link to show your research paper.",
-    });
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-6">
-            <CheckCircle className="w-8 h-8 text-green-500" />
-          </div>
-          <h1 className="text-4xl font-bold text-gray-800 mb-4">
-            Payment Successful!
-          </h1>
-          <p className="text-xl text-gray-600">
-            Your research paper has been generated successfully
-          </p>
-        </div>
-
-        <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-          <div className="flex justify-end space-x-4 mb-6">
-            <Button 
-              onClick={handleDownload}
-              className="bg-blue-600 hover:bg-blue-700 text-white"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Download PDF
-            </Button>
-            <Button 
-              onClick={handleShare}
-              variant="outline"
-            >
-              <Share2 className="w-4 h-4 mr-2" />
-              Share
-            </Button>
-          </div>
-
-          <Card className="border border-gray-100">
-            <PaperDisplay
-              content={paperData.fullContent}
-              isGenerating={false}
-              paperData={paperData.formState}
-            />
-          </Card>
-        </div>
-
-        <div className="text-center">
-          <Link href="/">
-            <Button variant="outline" className="mx-2">
-              Generate Another Paper
-            </Button>
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export default function HomePage() {
   const [hoveredFeature, setHoveredFeature] = useState<number | null>(null);
-  const [paperData, setPaperData] = useState<GeneratedPaperData | null>(null);
-  const searchParams = useSearchParams();
-  const success = searchParams.get('success');
 
-  useEffect(() => {
-    if (success === 'true') {
-      // Load paper data from localStorage
-      try {
-        const savedPaperData = localStorage.getItem('generatedPaper');
-        if (savedPaperData) {
-          setPaperData(JSON.parse(savedPaperData));
-          // Clear the localStorage after successful load
-          localStorage.removeItem('generatedPaper');
-        }
-      } catch (error) {
-        console.error('Error retrieving paper data:', error);
-      }
-    }
-  }, [success]);
-
-  // If success param is true and we have paper data, show success content
-  if (success === 'true' && paperData) {
-    return <SuccessContent paperData={paperData} />;
-  }
-
-  // Otherwise show normal home page
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-gray-900 dark:to-gray-950 relative overflow-hidden">
       <ParticleBackground />
