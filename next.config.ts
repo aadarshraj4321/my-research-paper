@@ -1,16 +1,3 @@
-// import type { NextConfig } from "next";
-
-// const nextConfig: NextConfig = {
-//   images: {
-//     domains: ['via.placeholder.com'], // Allow images from placeholder.com
-//   },
-// };
-
-// export default nextConfig;
-
-
-
-
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -20,7 +7,8 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/payment/success',
+        // API route for PayU POST
+        source: '/api/payment/success',
         headers: [
           {
             key: 'Access-Control-Allow-Origin',
@@ -36,7 +24,39 @@ const nextConfig: NextConfig = {
           },
         ],
       },
+      {
+        // Frontend success page
+        source: '/payment/success',
+        headers: [
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: '*',
+          },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET',
+          },
+        ],
+      },
     ];
+  },
+  async rewrites() {
+    return {
+      beforeFiles: [
+        // Handle PayU POST request
+        {
+          source: '/payment/success',
+          destination: '/api/payment/success',
+          has: [
+            {
+              type: 'header',
+              key: 'content-type',
+              value: 'application/x-www-form-urlencoded',
+            },
+          ],
+        },
+      ],
+    };
   },
 };
 

@@ -2543,10 +2543,60 @@ export default function GeneratePage(): React.ReactElement {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [fullContent, setFullContent] = useState<string>("");
 
+  // const handleGenerate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+  //   e.preventDefault();
+  //   setIsGenerating(true);
+
+  //   try {
+  //     const response = await fetch("/api/generate-paper", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({
+  //         ...formState,
+  //         customizations: {
+  //           sections: formState.sections,
+  //           includeGraphs: formState.includeGraphs === "yes",
+  //           minimumWords: formState.minimumWords,
+  //         },
+  //       }),
+  //     });
+
+  //     if (!response.ok) throw new Error("Generation failed");
+
+  //     const data = await response.json();
+  //     setFullContent(data.fullContent);
+
+  //     // Store paper data in localStorage before payment
+  //     const paperData = {
+  //       fullContent: data.fullContent,
+  //       formState: formState
+  //     };
+  //     localStorage.setItem('generatedPaper', JSON.stringify(paperData));
+
+  //     toast({
+  //       title: "Success!",
+  //       description: "Your research paper has been generated.",
+  //     });
+
+  //     // Redirect to payment
+  //     router.push("https://pmny.in/Cr7qji0hECrG");
+
+  //   } catch (error) {
+  //     console.error(error);
+  //     toast({
+  //       title: "Error",
+  //       description: "Failed to generate paper. Please try again.",
+  //       variant: "destructive",
+  //     });
+  //   } finally {
+  //     setIsGenerating(false);
+  //   }
+  // };
+
   const handleGenerate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setIsGenerating(true);
-
+  
     try {
       const response = await fetch("/api/generate-paper", {
         method: "POST",
@@ -2560,27 +2610,28 @@ export default function GeneratePage(): React.ReactElement {
           },
         }),
       });
-
+  
       if (!response.ok) throw new Error("Generation failed");
-
+  
       const data = await response.json();
       setFullContent(data.fullContent);
-
-      // Store paper data in localStorage before payment
+  
+      // Store paper data in localStorage
       const paperData = {
         fullContent: data.fullContent,
         formState: formState
       };
       localStorage.setItem('generatedPaper', JSON.stringify(paperData));
-
+  
       toast({
         title: "Success!",
         description: "Your research paper has been generated.",
       });
-
-      // Redirect to payment
-      router.push("https://pmny.in/Cr7qji0hECrG");
-
+  
+      // Redirect to PayU payment page
+      const successUrl = `${window.location.origin}/api/payment/success`;
+      window.location.href = `https://pmny.in/Cr7qji0hECrG?surl=${encodeURIComponent(successUrl)}`;
+  
     } catch (error) {
       console.error(error);
       toast({
