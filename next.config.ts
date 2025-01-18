@@ -56,6 +56,8 @@ const nextConfig: NextConfig = {
           ],
         },
       ],
+      afterFiles: [], // Required by type definition
+      fallback: [],   // Required by type definition
     };
   },
 };

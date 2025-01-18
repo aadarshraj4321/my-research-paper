@@ -2478,7 +2478,7 @@ import { FormState } from "@/app/types/paper";
 import ResearchForm from "@/app/components/ResearchForm";
 import PaperDisplay from "@/app/components/PaperDisplay";
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 
 const Header = () => (
   <header className="bg-white/80 border-b shadow-sm backdrop-blur-md sticky top-0 z-50">
@@ -2531,7 +2531,7 @@ const EmptyPaperState = () => (
 
 export default function GeneratePage(): React.ReactElement {
   const { toast } = useToast();
-  const router = useRouter();
+  // const router = useRouter();
   const [formState, setFormState] = useState<FormState>({
     topic: "",
     authorName: "",
