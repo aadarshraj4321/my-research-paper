@@ -25,7 +25,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(request: NextRequest) {
   try {
     // Get the PayU response data
-    const formData = await request.formData();
+    // const formData = await request.formData();
     // Add your PayU verification logic here if needed
     
     // Instead of redirecting to /payment/success, redirect to home with success parameter
