@@ -22,7 +22,7 @@ const PricingPage = () => {
               Create Research Paper
             </h3>
             <div className="flex items-center justify-center space-x-2">
-              <p className="text-4xl font-bold text-gray-900 dark:text-white">₹49</p>
+              <p className="text-4xl font-bold text-gray-900 dark:text-white">₹21</p>
               <span className="text-gray-500 dark:text-gray-400">/paper</span>
             </div>
           </div>
@@ -34,8 +34,6 @@ const PricingPage = () => {
               'Professional Research Format',
               'In-depth Analysis',
               'Citation Support',
-              'Expert Review',
-              'Unlimited Revisions'
             ].map((feature, index) => (
               <li key={index} className="flex items-center space-x-3 group">
                 <div className="flex-shrink-0 w-6 h-6 rounded-full bg-gradient-to-r from-indigo-500/10 to-purple-500/10 dark:from-indigo-400/10 dark:to-purple-400/10 flex items-center justify-center">

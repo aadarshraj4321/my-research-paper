@@ -749,6 +749,8 @@ const AnimatedButton = () => {
         <div className="absolute -inset-1 rounded-full blur-md bg-gradient-to-r from-indigo-600 to-purple-600 opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
       </motion.div>
     </Link>
+
+
   );
 };
 
