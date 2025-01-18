@@ -384,19 +384,19 @@ import Link from 'next/link';
 import { GeneratedPaperData } from "@/app/types/paper";
 import { useRouter } from 'next/navigation';
 
-const EmptyState = () => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white p-8">
-    <div className="max-w-4xl mx-auto text-center">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">No Paper Found</h2>
-      <p className="text-gray-600 mb-6">We couldn&apos;t find your generated paper. Please try generating a new one.</p>
-      <Link href="/">
-        <Button>
-          Return to Home
-        </Button>
-      </Link>
-    </div>
-  </div>
-);
+// const EmptyState = () => (
+//   <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white p-8">
+//     <div className="max-w-4xl mx-auto text-center">
+//       <h2 className="text-2xl font-semibold text-gray-800 mb-4">No Paper Found</h2>
+//       <p className="text-gray-600 mb-6">We couldn&apos;t find your generated paper. Please try generating a new one.</p>
+//       <Link href="/">
+//         <Button>
+//           Return to Home
+//         </Button>
+//       </Link>
+//     </div>
+//   </div>
+// );
 
 // Add this at the top level of your file, outside the component
 if (typeof window !== 'undefined') {
