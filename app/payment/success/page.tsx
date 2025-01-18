@@ -959,7 +959,7 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { CheckCircle, Download, Share2, FileDown } from 'lucide-react';
+import { CheckCircle, Share2, FileDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 import { GeneratedPaperData, FormState, PaperDisplayProps } from "@/app/types/paper";
