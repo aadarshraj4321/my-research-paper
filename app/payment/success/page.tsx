@@ -110,7 +110,6 @@
 
 
 
-// payment/success/page.tsx
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
@@ -121,16 +120,39 @@ import PaperDisplay from '@/app/components/PaperDisplay';
 import Link from 'next/link';
 import { GeneratedPaperData } from "@/app/types/paper";
 
+const EmptyState = () => (
+  <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white p-8">
+    <div className="max-w-4xl mx-auto text-center">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-4">No Paper Found</h2>
+      <p className="text-gray-600 mb-6">We couldn&apos;t find your generated paper. Please try generating a new one.</p>
+      <Link href="/">
+        <Button>
+          Return to Home
+        </Button>
+      </Link>
+    </div>
+  </div>
+);
+
 export default function SuccessPage(): React.ReactElement {
   const { toast } = useToast();
   const [paperData, setPaperData] = useState<GeneratedPaperData | null>(null);
   
   useEffect(() => {
-    const savedPaperData = localStorage.getItem('generatedPaper');
-    if (savedPaperData) {
-      setPaperData(JSON.parse(savedPaperData));
+    try {
+      const savedPaperData = localStorage.getItem('generatedPaper');
+      if (savedPaperData) {
+        setPaperData(JSON.parse(savedPaperData));
+      }
+    } catch (error) {
+      console.error('Error retrieving paper data:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load your paper data.",
+        variant: "destructive",
+      });
     }
-  }, []);
+  }, [toast]);
 
   const handleDownload = () => {
     toast({
@@ -148,19 +170,7 @@ export default function SuccessPage(): React.ReactElement {
   };
 
   if (!paperData) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white p-8">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">No Paper Found</h2>
-          <p className="text-gray-600 mb-6">We couldn't find your generated paper. Please try generating a new one.</p>
-          <Link href="/">
-            <Button>
-              Return to Home
-            </Button>
-          </Link>
-        </div>
-      </div>
-    );
+    return <EmptyState />;
   }
 
   return (
@@ -182,7 +192,7 @@ export default function SuccessPage(): React.ReactElement {
           <div className="flex justify-end space-x-4 mb-6">
             <Button 
               onClick={handleDownload}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-blue-600 hover:bg-blue-700 text-white"
             >
               <Download className="w-4 h-4 mr-2" />
               Download PDF
@@ -216,6 +226,3 @@ export default function SuccessPage(): React.ReactElement {
     </div>
   );
 }
-
-
-
