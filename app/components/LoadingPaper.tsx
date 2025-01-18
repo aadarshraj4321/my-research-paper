@@ -30,21 +30,21 @@ export const LoadingPaper: React.FC = () => {
   const [currentJokeIndex, setCurrentJokeIndex] = useState(0);
 
   // Fetch jokes from the public/jokes.json file
-  useEffect(() => {
-    fetch('/jokes.json')
-      .then((response) => response.json())
-      .then((data) => setJokes(data))
-      .catch((error) => console.error('Error fetching jokes:', error));
-  }, []);
+  // useEffect(() => {
+  //   fetch('/jokes.json')
+  //     .then((response) => response.json())
+  //     .then((data) => setJokes(data))
+  //     .catch((error) => console.error('Error fetching jokes:', error));
+  // }, []);
 
-  // Function to show a random joke
-  const showNextJoke = () => {
-    let randomIndex;
-    do {
-      randomIndex = Math.floor(Math.random() * jokes.length);
-    } while (randomIndex === currentJokeIndex); // Ensure the new joke is different
-    setCurrentJokeIndex(randomIndex);
-  };
+  // // Function to show a random joke
+  // const showNextJoke = () => {
+  //   let randomIndex;
+  //   do {
+  //     randomIndex = Math.floor(Math.random() * jokes.length);
+  //   } while (randomIndex === currentJokeIndex); // Ensure the new joke is different
+  //   setCurrentJokeIndex(randomIndex);
+  // };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6 relative overflow-hidden">
@@ -62,7 +62,7 @@ export const LoadingPaper: React.FC = () => {
       </div>
 
       {/* Joke Card */}
-      {jokes.length > 0 && (
+      {/* {jokes.length > 0 && (
         <div className="relative z-10 bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full text-center transform transition-transform hover:scale-105 border border-gray-100">
           <p className="text-base text-gray-700 mb-6">
             {jokes[currentJokeIndex].joke}
@@ -74,7 +74,7 @@ export const LoadingPaper: React.FC = () => {
             Next Joke
           </button>
         </div>
-      )}
+      )} */}
 
       {/* Loading Message */}
       <p className="mt-8 text-lg text-gray-600 relative z-10">

@@ -228,6 +228,7 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
+import CheckoutPage from '../CheckoutPage';
 // import { Sun, Moon } from 'lucide-react';
 // import { useTheme } from './themeContext';
 
@@ -264,6 +265,14 @@ export default function Header() {
                 Pricing
               </Button>
             </Link>
+
+
+            <div>
+  <a href="https://pmny.in/Cr7qji0hECrG" className="w-[135px] bg-[#1CA953] text-center font-extrabold py-[11px] text-white text-[12px] inline-block no-underline rounded-[3.229px]">
+    Pay Now
+  </a>
+</div>
+
 
             {/* Theme Toggle */}
             {/* <Button
