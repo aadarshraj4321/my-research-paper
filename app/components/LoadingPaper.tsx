@@ -23,28 +23,10 @@
 
 
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 export const LoadingPaper: React.FC = () => {
-  const [jokes, setJokes] = useState<{ joke: string }[]>([]);
-  const [currentJokeIndex, setCurrentJokeIndex] = useState(0);
 
-  // Fetch jokes from the public/jokes.json file
-  // useEffect(() => {
-  //   fetch('/jokes.json')
-  //     .then((response) => response.json())
-  //     .then((data) => setJokes(data))
-  //     .catch((error) => console.error('Error fetching jokes:', error));
-  // }, []);
-
-  // // Function to show a random joke
-  // const showNextJoke = () => {
-  //   let randomIndex;
-  //   do {
-  //     randomIndex = Math.floor(Math.random() * jokes.length);
-  //   } while (randomIndex === currentJokeIndex); // Ensure the new joke is different
-  //   setCurrentJokeIndex(randomIndex);
-  // };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white p-6 relative overflow-hidden">
@@ -61,20 +43,7 @@ export const LoadingPaper: React.FC = () => {
         </div>
       </div>
 
-      {/* Joke Card */}
-      {/* {jokes.length > 0 && (
-        <div className="relative z-10 bg-white rounded-2xl shadow-xl p-6 max-w-sm w-full text-center transform transition-transform hover:scale-105 border border-gray-100">
-          <p className="text-base text-gray-700 mb-6">
-            {jokes[currentJokeIndex].joke}
-          </p>
-          <button
-            onClick={showNextJoke}
-            className="bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-md hover:shadow-lg"
-          >
-            Next Joke
-          </button>
-        </div>
-      )} */}
+
 
       {/* Loading Message */}
       <p className="mt-8 text-lg text-gray-600 relative z-10">
