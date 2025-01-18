@@ -82,6 +82,15 @@ export interface CitationStyle {
   label: string;
 }
 
+// export interface FormState {
+//   topic: string;
+//   authorName: string;
+//   citationStyle: string;
+//   sections: number;
+//   includeGraphs: string;
+//   minimumWords: number;
+// }
+
 export interface FormState {
   topic: string;
   authorName: string;
