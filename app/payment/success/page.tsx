@@ -373,7 +373,6 @@
 
 
 
-
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Card } from '@/components/ui/card';
@@ -399,14 +398,21 @@ const EmptyState = () => (
   </div>
 );
 
-export default function SuccessPage(): React.ReactElement {
+// Add this at the top level of your file, outside the component
+if (typeof window !== 'undefined') {
+  // Execute URL change immediately when the script loads
+  window.history.replaceState({}, '', '/');
+}
+
+// Changed return type to React.ReactElement | null
+export default function SuccessPage(): React.ReactElement | null {
   const { toast } = useToast();
   const router = useRouter();
   const [paperData, setPaperData] = useState<GeneratedPaperData | null>(null);
+  const [mounted, setMounted] = useState(false);
   
   useEffect(() => {
-    // Hide the /payment/success from URL immediately
-    window.history.replaceState({}, '', '/');
+    setMounted(true);
     
     // Load paper data from localStorage
     try {
@@ -416,10 +422,8 @@ export default function SuccessPage(): React.ReactElement {
         // Clear the localStorage after successful load
         localStorage.removeItem('generatedPaper');
       } else {
-        // If no paper data, redirect to home after a short delay
-        setTimeout(() => {
-          router.push('/');
-        }, 1500);
+        // If no paper data, redirect to home immediately
+        router.replace('/');
       }
     } catch (error) {
       console.error('Error retrieving paper data:', error);
@@ -428,10 +432,8 @@ export default function SuccessPage(): React.ReactElement {
         description: "Failed to load your paper data.",
         variant: "destructive",
       });
-      // Redirect to home after error
-      setTimeout(() => {
-        router.push('/');
-      }, 1500);
+      // Redirect to home immediately after error
+      router.replace('/');
     }
   }, [toast, router]);
 
@@ -446,7 +448,6 @@ export default function SuccessPage(): React.ReactElement {
   };
 
   const handleShare = () => {
-    // Use the root URL since we're hiding the success path
     const shareUrl = window.location.origin;
     navigator.clipboard.writeText(shareUrl);
     toast({
@@ -455,23 +456,9 @@ export default function SuccessPage(): React.ReactElement {
     });
   };
 
-  // Prevent flash of empty state during initial load
-  const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600" />
-      </div>
-    );
-  }
-
-  if (!paperData) {
-    return <EmptyState />;
+  // Don't render anything until component is mounted and we have paper data
+  if (!mounted || !paperData) {
+    return null;
   }
 
   return (
