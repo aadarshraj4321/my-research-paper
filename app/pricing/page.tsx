@@ -22,7 +22,7 @@ const PricingPage = () => {
               Create Research Paper
             </h3>
             <div className="flex items-center justify-center space-x-2">
-              <p className="text-4xl font-bold text-gray-900 dark:text-white">₹21</p>
+              <p className="text-4xl font-bold text-gray-900 dark:text-white">₹49</p>
               <span className="text-gray-500 dark:text-gray-400">/paper</span>
             </div>
           </div>

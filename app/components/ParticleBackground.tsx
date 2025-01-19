@@ -1320,6 +1320,241 @@
 
 
 
+// "use client";
+// import { useEffect, useRef } from 'react';
+// import * as THREE from 'three';
+// import { useTheme } from './common/themeContext';
+
+// const ParticleBackground = () => {
+//   const containerRef = useRef<HTMLDivElement>(null);
+//   const { theme } = useTheme();
+  
+//   useEffect(() => {
+//     if (!containerRef.current) return;
+
+//     const scene = new THREE.Scene();
+//     scene.background = new THREE.Color(theme === 'light' ? '#ffffff' : '#030712');
+    
+//     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
+//     const renderer = new THREE.WebGLRenderer({ 
+//       antialias: true,
+//       powerPreference: "high-performance",
+//       precision: "mediump"
+//     });
+    
+//     renderer.setSize(window.innerWidth, window.innerHeight);
+//     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+//     containerRef.current.appendChild(renderer.domElement);
+
+//     // Balanced colors for both themes
+//     const colors = {
+//       light: {
+//         outer: '#000000', // Pure black
+//         middle: '#1e1b4b', // Dark indigo
+//         inner: '#312e81', // Medium indigo
+//         particles: '#3730a3' // Light indigo
+//       },
+//       dark: {
+//         outer: '#6A0DAD', // Pure white
+//         middle: '#e0e7ff', // Light indigo
+//         inner: '#a5b4fc', // Medium indigo
+//         particles: '#6366f1' // Dark indigo
+//       }
+//     };
+
+//     const currentColors = theme === 'light' ? colors.light : colors.dark;
+
+//     const createParticleSystem = (count: number, size: number, color: string, radius: number) => {
+//       const positions = new Float32Array(count * 3);
+//       const colors = new Float32Array(count * 3);
+//       const color1 = new THREE.Color(color);
+      
+//       for(let i = 0; i < count; i++) {
+//         const theta = Math.random() * Math.PI * 2;
+//         const phi = Math.acos((Math.random() * 2) - 1);
+//         const r = Math.random() * radius;
+
+//         positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+//         positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+//         positions[i * 3 + 2] = r * Math.cos(phi);
+
+//         // Balanced intensity for both themes
+//         const intensity = Math.random() * 0.3 + 0.7;
+//         colors[i * 3] = color1.r * intensity;
+//         colors[i * 3 + 1] = color1.g * intensity;
+//         colors[i * 3 + 2] = color1.b * intensity;
+//       }
+
+//       const geometry = new THREE.BufferGeometry();
+//       geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+//       geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+//       const material = new THREE.PointsMaterial({
+//         size,
+//         vertexColors: true,
+//         transparent: true,
+//         opacity: 0.8,
+//         blending: THREE.AdditiveBlending,
+//         depthWrite: false,
+//         sizeAttenuation: true
+//       });
+
+//       return new THREE.Points(geometry, material);
+//     };
+
+//     const blackHoleRadius = 3;
+//     // Same particle configuration for both themes
+//     const particleSystems = [
+//       createParticleSystem(5000, 0.025, currentColors.outer, blackHoleRadius * 2),
+//       createParticleSystem(4000, 0.02, currentColors.middle, blackHoleRadius * 1.5),
+//       createParticleSystem(3000, 0.015, currentColors.inner, blackHoleRadius),
+//       createParticleSystem(2000, 0.01, currentColors.particles, blackHoleRadius * 2.5)
+//     ];
+
+//     particleSystems.forEach(system => scene.add(system));
+
+//     // Enhanced center effect for both themes
+//     const centerGeometry = new THREE.SphereGeometry(blackHoleRadius * 0.4, 32, 32);
+//     const centerMaterial = new THREE.MeshPhongMaterial({
+//       color: theme === 'light' ? '#000000' : '#000000',
+//       transparent: true,
+//       opacity: 0.95,
+//       shininess: 100
+//     });
+//     const center = new THREE.Mesh(centerGeometry, centerMaterial);
+//     scene.add(center);
+
+//     // Balanced lighting for both themes
+//     const ambientLight = new THREE.AmbientLight(
+//       theme === 'light' ? '#1e1b4b' : '#ffffff',
+//       1
+//     );
+//     scene.add(ambientLight);
+
+//     const pointLight = new THREE.PointLight(
+//       theme === 'light' ? '#1e1b4b' : '#ffffff',
+//       2,
+//       100
+//     );
+//     pointLight.position.set(5, 5, 5);
+//     scene.add(pointLight);
+
+//     camera.position.z = 8;
+
+//     const mouse = {
+//       x: 0,
+//       y: 0,
+//       vx: 0,
+//       vy: 0
+//     };
+
+//     window.addEventListener('mousemove', (event) => {
+//       mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+//       mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+//     });
+
+//     let frame = 0;
+//     const animate = () => {
+//       requestAnimationFrame(animate);
+//       frame += 0.003;
+
+//       mouse.vx += (mouse.x - mouse.vx) * 0.05;
+//       mouse.vy += (mouse.y - mouse.vy) * 0.05;
+
+//       particleSystems.forEach((system, index) => {
+//         system.rotation.y = frame * (0.2 + index * 0.1) + mouse.vx * 2;
+//         system.rotation.x = mouse.vy * 1.5;
+
+//         const positions = system.geometry.attributes.position.array as Float32Array;
+//         const count = positions.length / 3;
+
+//         for(let i = 0; i < count; i += 3) {
+//           const x = positions[i];
+//           const y = positions[i + 1];
+//           const z = positions[i + 2];
+          
+//           const distance = Math.sqrt(x * x + y * y + z * z);
+          
+//           if (distance < blackHoleRadius * 0.3) {
+//             const theta = Math.random() * Math.PI * 2;
+//             const phi = Math.acos((Math.random() * 2) - 1);
+//             const r = Math.random() * blackHoleRadius * 2;
+
+//             positions[i] = r * Math.sin(phi) * Math.cos(theta);
+//             positions[i + 1] = r * Math.sin(phi) * Math.sin(theta);
+//             positions[i + 2] = r * Math.cos(phi);
+//           } else {
+//             const force = 0.002 / (distance * distance);
+//             positions[i] -= x * force;
+//             positions[i + 1] -= y * force;
+//             positions[i + 2] -= z * force;
+//           }
+//         }
+        
+//         system.geometry.attributes.position.needsUpdate = true;
+//       });
+
+//       center.rotation.y = mouse.vx * 3;
+//       center.rotation.x = mouse.vy * 2;
+
+//       pointLight.position.x = mouse.vx * 10;
+//       pointLight.position.y = mouse.vy * 10;
+
+//       renderer.render(scene, camera);
+//     };
+
+//     animate();
+
+//     const handleResize = () => {
+//       camera.aspect = window.innerWidth / window.innerHeight;
+//       camera.updateProjectionMatrix();
+//       renderer.setSize(window.innerWidth, window.innerHeight);
+//     };
+
+//     window.addEventListener('resize', handleResize);
+
+//     return () => {
+//       window.removeEventListener('resize', handleResize);
+//       if (containerRef.current) {
+//         containerRef.current.removeChild(renderer.domElement);
+//       }
+      
+//       particleSystems.forEach(system => {
+//         scene.remove(system);
+//         system.geometry.dispose();
+//         (system.material as THREE.PointsMaterial).dispose();
+//       });
+//       scene.remove(center);
+//       centerGeometry.dispose();
+//       centerMaterial.dispose();
+//       renderer.dispose();
+//     };
+//   }, [theme]);
+
+//   return (
+//     <div 
+//       ref={containerRef} 
+//       className="fixed inset-0"
+//       style={{ zIndex: 0, background: theme === 'light' ? '#ffffff' : '#030712' }}
+//     />
+//   );
+// };
+
+// export default ParticleBackground;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client";
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
@@ -1333,7 +1568,7 @@ const ParticleBackground = () => {
     if (!containerRef.current) return;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(theme === 'light' ? '#ffffff' : '#030712');
+    scene.background = new THREE.Color('#ffffff');
     
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 2000);
     const renderer = new THREE.WebGLRenderer({ 
@@ -1346,23 +1581,13 @@ const ParticleBackground = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     containerRef.current.appendChild(renderer.domElement);
 
-    // Balanced colors for both themes
+    // Light theme colors - from darker to lighter
     const colors = {
-      light: {
-        outer: '#000000', // Pure black
-        middle: '#1e1b4b', // Dark indigo
-        inner: '#312e81', // Medium indigo
-        particles: '#3730a3' // Light indigo
-      },
-      dark: {
-        outer: '#6A0DAD', // Pure white
-        middle: '#e0e7ff', // Light indigo
-        inner: '#a5b4fc', // Medium indigo
-        particles: '#6366f1' // Dark indigo
-      }
+      outer: '#8A2BE2',      // Pure black
+      middle: '#8A2BE2',     // Dark gray
+      inner: '#8A2BE2',      // Medium gray
+      particles: '#8A2BE2'   // Light gray
     };
-
-    const currentColors = theme === 'light' ? colors.light : colors.dark;
 
     const createParticleSystem = (count: number, size: number, color: string, radius: number) => {
       const positions = new Float32Array(count * 3);
@@ -1378,8 +1603,8 @@ const ParticleBackground = () => {
         positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
         positions[i * 3 + 2] = r * Math.cos(phi);
 
-        // Balanced intensity for both themes
-        const intensity = Math.random() * 0.3 + 0.7;
+        // Increased opacity for better visibility on white
+        const intensity = Math.random() * 0.4 + 0.6;
         colors[i * 3] = color1.r * intensity;
         colors[i * 3 + 1] = color1.g * intensity;
         colors[i * 3 + 2] = color1.b * intensity;
@@ -1393,8 +1618,8 @@ const ParticleBackground = () => {
         size,
         vertexColors: true,
         transparent: true,
-        opacity: 0.8,
-        blending: THREE.AdditiveBlending,
+        opacity: 0.9,        // Increased opacity
+        blending: THREE.NormalBlending, // Changed to normal blending for better contrast
         depthWrite: false,
         sizeAttenuation: true
       });
@@ -1403,39 +1628,32 @@ const ParticleBackground = () => {
     };
 
     const blackHoleRadius = 3;
-    // Same particle configuration for both themes
+    // Adjusted particle sizes and counts for better visibility
     const particleSystems = [
-      createParticleSystem(5000, 0.025, currentColors.outer, blackHoleRadius * 2),
-      createParticleSystem(4000, 0.02, currentColors.middle, blackHoleRadius * 1.5),
-      createParticleSystem(3000, 0.015, currentColors.inner, blackHoleRadius),
-      createParticleSystem(2000, 0.01, currentColors.particles, blackHoleRadius * 2.5)
+      createParticleSystem(6000, 0.03, colors.outer, blackHoleRadius * 2),
+      createParticleSystem(5000, 0.025, colors.middle, blackHoleRadius * 1.5),
+      createParticleSystem(4000, 0.02, colors.inner, blackHoleRadius),
+      createParticleSystem(3000, 0.015, colors.particles, blackHoleRadius * 2.5)
     ];
 
     particleSystems.forEach(system => scene.add(system));
 
-    // Enhanced center effect for both themes
+    // Enhanced black hole effect
     const centerGeometry = new THREE.SphereGeometry(blackHoleRadius * 0.4, 32, 32);
     const centerMaterial = new THREE.MeshPhongMaterial({
-      color: theme === 'light' ? '#000000' : '#000000',
+      color: '#000000',
       transparent: true,
-      opacity: 0.95,
+      opacity: 1,           // Full opacity for strong contrast
       shininess: 100
     });
     const center = new THREE.Mesh(centerGeometry, centerMaterial);
     scene.add(center);
 
-    // Balanced lighting for both themes
-    const ambientLight = new THREE.AmbientLight(
-      theme === 'light' ? '#1e1b4b' : '#ffffff',
-      1
-    );
+    // Adjusted lighting for white background
+    const ambientLight = new THREE.AmbientLight('#ffffff', 0.5);
     scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(
-      theme === 'light' ? '#1e1b4b' : '#ffffff',
-      2,
-      100
-    );
+    const pointLight = new THREE.PointLight('#ffffff', 1.5, 100);
     pointLight.position.set(5, 5, 5);
     scene.add(pointLight);
 
@@ -1535,7 +1753,7 @@ const ParticleBackground = () => {
     <div 
       ref={containerRef} 
       className="fixed inset-0"
-      style={{ zIndex: 0, background: theme === 'light' ? '#ffffff' : '#030712' }}
+      style={{ zIndex: 0, background: '#ffffff' }}
     />
   );
 };

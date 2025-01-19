@@ -786,7 +786,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-gray-900 dark:to-gray-950 relative overflow-hidden">
-      <ParticleBackground />
+      {/* <ParticleBackground /> */}
       <div className="relative z-10">
         <Header />
 
@@ -804,11 +804,11 @@ export default function HomePage() {
                    Transforming Research
                 </span>
                 <br />
-                <span className="text-gray-900 dark:text-white">AI-Powered</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 dark:from-indigo-400 dark:via-purple-400 dark:to-pink-400">AI-Powered</span>
               </h1>
               
               <motion.p 
-                className="mt-8 text-xl text-gray-600 dark:text-gray-300 leading-8"
+                className="mt-8 text-xl text-purple-600 dark:text-gray-800 leading-8"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
