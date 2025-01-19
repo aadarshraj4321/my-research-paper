@@ -1613,11 +1613,19 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 
-// Match frontend types
 interface Customizations {
   sections: number;
   includeGraphs: boolean;
@@ -1630,141 +1638,202 @@ interface PaperRequestBody {
   customizations: Customizations;
 }
 
-// interface PaperResponse {
-//   preview: string;
-//   fullContent: string;
-//   status: 'success' | 'error';
-//   message?: string;
-// }
+interface PaperResponse {
+  preview: string;
+  fullContent: string;
+}
 
-const OpenAIKey='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'
+interface ErrorResponse {
+  error: string;
+}
+
+const OPENAI_API_KEY = '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';
+
+if (!OPENAI_API_KEY) {
+  throw new Error("OPENAI_API_KEY is not defined in environment variables.");
+}
+
 const openai = new OpenAI({
-  apiKey: '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',  // Ensure you have this in .env
+  apiKey: OPENAI_API_KEY,
 });
 
 export async function POST(
   req: Request
-): Promise<NextResponse> {
+): Promise<NextResponse<PaperResponse | ErrorResponse>> {
   try {
-    // Input validation
-    if (!OpenAIKey) {
-      return NextResponse.json(
-        { 
-          status: 'error',
-          error: 'OpenAI API key is not configured' 
-        },
-        { status: 500 }
-      );
-    }
-
-    const body = await req.json();
-    const { topic, citationStyle, customizations } = body as PaperRequestBody;
+    const { topic, citationStyle, customizations }: PaperRequestBody = await req.json();
 
     if (!topic || !citationStyle || !customizations) {
       return NextResponse.json(
-        { 
-          status: 'error',
-          error: 'Missing required fields' 
-        },
+        { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    // Validate word count
-    if (customizations.minimumWords > 10000) {
-      return NextResponse.json(
-        {
-          status: 'error',
-          error: 'Word count exceeds maximum limit of 10,000'
-        },
-        { status: 400 }
-      );
-    }
+    const prompt = `
+      Generate a comprehensive research paper on "${topic}" with the following structure. For each section and subsection, provide detailed content. Do not skip any sections or leave any placeholders.
 
-    const messages: ChatCompletionMessageParam[] = [
-      {
-        role: "system",
-        content: "You are a professional academic researcher creating original research papers."
-      },
-      {
-        role: "user",
-        content: `Create a research paper on "${topic}" with:
-          - Citation style: ${citationStyle}
-          - Minimum words: ${customizations.minimumWords}
-          - Sections: ${customizations.sections}
-          ${customizations.includeGraphs ? '- Include data visualization descriptions' : ''}
-          
-          Follow academic structure with Abstract, Introduction, Literature Review, Methodology, Results, Discussion, and Conclusion.`
-      }
-    ];
+      Format Requirements:
+      - Citation Style: ${citationStyle.toUpperCase()}
+      - Minimum Words: ${customizations.minimumWords}
+      - Each section must have a clear heading followed by introductory text before any subsections
+      - Use recent research papers (2020-2024) for citations
+      ${customizations.includeGraphs ? '- Include detailed data visualization descriptions' : ''}
 
-    try {
-      const completion = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages,
-        temperature: 0.7,
-        max_tokens: 4000,
-        presence_penalty: 0.6,
-        frequency_penalty: 0.8
-      });
+      Paper Structure:
 
-      const fullContent = completion.choices[0]?.message?.content;
+      # Title
+      [Generate a specific, academic title for the paper]
 
-      if (!fullContent) {
-        throw new Error('No content generated');
-      }
+      # Abstract
+      [Write a 300-word structured abstract that includes:
+      - Research background and context
+      - Clear problem statement
+      - Methodology overview
+      - Key findings
+      - Main conclusions]
 
-      // Create preview
-      const preview = fullContent.split(' ').slice(0, 500).join(' ') + '...';
-
-      return NextResponse.json({
-        status: 'success',
-        preview,
-        fullContent,
-      });
-
-    } catch (openaiError) {
-      console.error('OpenAI API Error:', openaiError);
+      # 1. Introduction [Start with 200 words introducing the overall topic before subsections]
+      [Write detailed introductory text explaining the importance and context of the research]
       
-      if (openaiError instanceof Error) {
-        // Handle specific OpenAI errors
-        if (openaiError.message.includes('Rate limit')) {
-          return NextResponse.json(
-            { 
-              status: 'error',
-              error: 'Rate limit exceeded. Please try again in a moment.' 
-            },
-            { status: 429 }
-          );
-        }
-        
-        if (openaiError.message.includes('Invalid API key')) {
-          return NextResponse.json(
-            { 
-              status: 'error',
-              error: 'Service configuration error. Please contact support.' 
-            },
-            { status: 500 }
-          );
-        }
-      }
+      ## 1.1 Background and Context [250 words]
+      [Provide comprehensive background information with at least 3 citations]
+      
+      ## 1.2 Problem Statement [200 words]
+      [Clearly define the research problem with supporting evidence]
+      
+      ## 1.3 Research Objectives [200 words]
+      [List and explain specific research goals and questions]
 
-      return NextResponse.json(
-        { 
-          status: 'error',
-          error: 'Failed to generate paper content. Please try again.' 
+      # 2. Literature Review [Start with 200 words introducing the literature review approach]
+      [Write overview text explaining how the literature review was conducted]
+      
+      ## 2.1 Theoretical Background [300 words]
+      [Discuss major theories and frameworks with at least 4 citations]
+      
+      ## 2.2 Current Research [300 words]
+      [Review latest findings with at least 4 citations from 2020-2024]
+      
+      ## 2.3 Research Gaps [200 words]
+      [Identify specific gaps with supporting evidence]
+
+      # 3. Methodology [Start with 200 words introducing the overall methodology]
+      [Write methodology overview explaining the research approach]
+      
+      ## 3.1 Research Design [250 words]
+      [Detail the research design with justification]
+      
+      ## 3.2 Data Collection [250 words]
+      [Explain data collection methods thoroughly]
+      
+      ## 3.3 Analysis Methods [250 words]
+      [Describe analytical techniques in detail]
+
+      # 4. Results [Start with 200 words introducing the results section]
+      [Write overview text introducing the main findings]
+      
+      ## 4.1 Key Findings [300 words]
+      [Present main results with data]
+      
+      ${customizations.includeGraphs ? `## 4.2 Data Visualization [250 words]
+      [Describe graphs and trends in detail]
+      ` : ''}
+      
+      ## 4.3 Analysis [300 words]
+      [Provide in-depth analysis of findings]
+
+      # 5. Discussion [Start with 200 words introducing the discussion section]
+      [Write overview text framing the discussion]
+      
+      ## 5.1 Interpretation [300 words]
+      [Interpret results in context of literature]
+      
+      ## 5.2 Implications [250 words]
+      [Discuss theoretical and practical implications]
+      
+      ## 5.3 Limitations and Future Research [250 words]
+      [Address limitations and future directions]
+
+      # 6. Conclusion [400 words]
+      [Provide a comprehensive conclusion that:
+      - Summarizes key findings
+      - Addresses research objectives
+      - Highlights main contributions
+      - Suggests practical applications]
+
+      # References
+      Important: Provide at least 15 real, recent (2020-2024) academic references in ${citationStyle.toUpperCase()} format. Include:
+      - DOI numbers when available
+      - Full author names
+      - Journal names
+      - Volume/issue numbers
+      - Page numbers
+      Each reference must be cited at least once in the text.
+
+      Additional Requirements:
+      1. Every section must begin with its own introductory text before any subsections
+      2. Include transition sentences between sections and subsections
+      3. Use formal academic language throughout
+      4. Support all claims with citations
+      5. Include in-text citations in proper ${citationStyle.toUpperCase()} format
+      6. Ensure every subsection is fully developed with required word count
+      7. Use clear topic sentences for each paragraph
+      8. Include critical analysis throughout
+      9. Maintain consistent academic tone
+      10. Provide evidence-based arguments
+
+      Important Notes:
+      - Do not use placeholder text
+      - Write complete, detailed content for each section
+      - Include real, verifiable references
+      - Ensure logical flow between sections
+      - Maintain consistent formatting
+    `.trim();
+
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4-turbo-preview", // Using GPT-4 Turbo as it's best suited for academic content
+      messages: [
+        {
+          role: "system",
+          content: "You are an expert academic researcher and writer. Generate a detailed, well-structured research paper with proper citations and academic language."
         },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.7, // Balanced between creativity and accuracy
+      max_tokens: 4000, // Adjust based on your needs
+      top_p: 0.9,
+      frequency_penalty: 0.3, // Encourage some variation in language
+      presence_penalty: 0.3 // Encourage coverage of different aspects
+    });
+
+    if (!completion.choices[0]?.message?.content) {
+      throw new Error('Failed to generate content');
+    }
+
+    const fullContent = completion.choices[0].message.content;
+
+    // Create a preview (first 500 words)
+    const preview = fullContent.split(' ').slice(0, 500).join(' ') + '...';
+
+    return NextResponse.json({
+      preview,
+      fullContent,
+    });
+  } catch (error: unknown) {
+    console.error('Error generating paper:', error);
+    
+    if (error instanceof Error) {
+      return NextResponse.json(
+        { error: error.message || 'Failed to generate paper' },
         { status: 500 }
       );
     }
-
-  } catch (error) {
-    console.error('Server Error:', error);
+    
     return NextResponse.json(
-      { 
-        status: 'error',
-        error: 'An unexpected error occurred. Please try again.' 
-      },
+      { error: 'An unknown error occurred' },
       { status: 500 }
     );
   }
