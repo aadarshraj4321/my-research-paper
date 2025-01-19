@@ -1630,12 +1630,12 @@ interface PaperRequestBody {
   customizations: Customizations;
 }
 
-interface PaperResponse {
-  preview: string;
-  fullContent: string;
-  status: 'success' | 'error';
-  message?: string;
-}
+// interface PaperResponse {
+//   preview: string;
+//   fullContent: string;
+//   status: 'success' | 'error';
+//   message?: string;
+// }
 
 const openai = new OpenAI({
   apiKey: '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',  // Ensure you have this in .env
