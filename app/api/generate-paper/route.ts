@@ -1619,10 +1619,7 @@
 
 
 
-
-
-
-
+// app/api/generate-paper/route.ts
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 
@@ -1657,175 +1654,225 @@ const openai = new OpenAI({
   apiKey: OPENAI_API_KEY,
 });
 
+function generatePrompt(topic: string, citationStyle: string, customizations: Customizations): string {
+  return `
+You are tasked with generating a comprehensive research paper on "${topic}". Please create a well-structured, academically rigorous paper following these requirements:
+
+FORMATTING REQUIREMENTS:
+- Citation Style: ${citationStyle.toUpperCase()}
+- Minimum Word Count: ${customizations.minimumWords} words
+- Each section must have a clear heading with proper numbering
+- Each major section requires an introductory paragraph before any subsections
+- Recent references (2020-2024) with proper citations
+${customizations.includeGraphs ? '- Include detailed data visualization descriptions where appropriate' : ''}
+
+STRUCTURE:
+
+1. Title Page
+- Create a clear, specific academic title for the paper
+- Include placeholder for author name, institution, and date
+
+2. Abstract (300-400 words)
+- Research background and context
+- Clear problem statement
+- Methodology overview
+- Key findings and results
+- Main conclusions and implications
+- Keywords: 4-6 relevant terms
+
+3. Introduction (800-1000 words)
+3.1 Background and Context
+- Comprehensive overview of the topic
+- Current state of research
+- Significance of the study
+3.2 Problem Statement
+- Clear identification of research gap
+- Research questions
+3.3 Objectives
+- Primary and secondary research objectives
+- Scope and limitations
+
+4. Literature Review (1000-1200 words)
+4.1 Theoretical Framework
+- Key theories and concepts
+- Historical development of the field
+4.2 Current Research
+- Analysis of recent studies (2020-2024)
+- Critical evaluation of methodologies
+4.3 Research Gaps
+- Identification of unexplored areas
+- Justification for current study
+
+5. Methodology (800-1000 words)
+5.1 Research Design
+- Approach justification
+- Research framework
+5.2 Data Collection Methods
+- Detailed description of methods
+- Sampling strategy (if applicable)
+5.3 Analysis Techniques
+- Data analysis procedures
+- Validity and reliability measures
+
+6. Results (1000-1200 words)
+6.1 Key Findings
+- Detailed presentation of results
+- Statistical analysis (if applicable)
+${customizations.includeGraphs ? `6.2 Data Visualization
+- Detailed description of trends
+- Analysis of patterns` : ''}
+6.3 Analysis
+- Interpretation of findings
+- Patterns and trends
+
+7. Discussion (1000-1200 words)
+7.1 Interpretation
+- Connection to research questions
+- Relationship to existing literature
+7.2 Implications
+- Theoretical implications
+- Practical applications
+7.3 Limitations and Future Research
+- Study limitations
+- Recommendations for future research
+
+8. Conclusion (400-500 words)
+- Summary of key findings
+- Research contribution
+- Final thoughts and recommendations
+
+9. References
+Requirements:
+- Minimum 15 academic references
+- At least 10 references from 2020-2024
+- Full citations in ${citationStyle.toUpperCase()} format
+- Include DOI numbers when available
+- Include all author names
+- Complete journal/publication information
+
+WRITING REQUIREMENTS:
+1. Use formal academic language throughout
+2. Provide evidence-based arguments
+3. Include proper in-text citations
+4. Maintain logical flow between sections
+5. Use clear topic sentences
+6. Include critical analysis
+7. Follow proper academic writing conventions
+8. Provide detailed methodology
+9. Include research limitations
+10. Maintain objective tone
+
+ADDITIONAL GUIDELINES:
+- No placeholder text
+- Fully developed sections
+- Logical transitions between sections
+- Evidence-based arguments
+- Clear and concise writing
+- Proper paragraph structure
+- Academic vocabulary
+- Consistent terminology
+- Balanced perspective
+- Critical analysis throughout
+
+Note: Focus on creating original, well-researched content that contributes to the academic discourse in the field. Ensure all claims are properly supported with recent references and maintain a scholarly tone throughout the paper.
+`;
+}
+
 export async function POST(
   req: Request
 ): Promise<NextResponse<PaperResponse | ErrorResponse>> {
   try {
+    // Add request timeout
+    const timeoutMs = 180000; // 3 minutes
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
     const { topic, citationStyle, customizations }: PaperRequestBody = await req.json();
 
     if (!topic || !citationStyle || !customizations) {
+      clearTimeout(timeoutId);
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
 
-    const prompt = `
-      Generate a comprehensive research paper on "${topic}" with the following structure. For each section and subsection, provide detailed content. Do not skip any sections or leave any placeholders.
-
-      Format Requirements:
-      - Citation Style: ${citationStyle.toUpperCase()}
-      - Minimum Words: ${customizations.minimumWords}
-      - Each section must have a clear heading followed by introductory text before any subsections
-      - Use recent research papers (2020-2024) for citations
-      ${customizations.includeGraphs ? '- Include detailed data visualization descriptions' : ''}
-
-      Paper Structure:
-
-      # Title
-      [Generate a specific, academic title for the paper]
-
-      # Abstract
-      [Write a 300-word structured abstract that includes:
-      - Research background and context
-      - Clear problem statement
-      - Methodology overview
-      - Key findings
-      - Main conclusions]
-
-      # 1. Introduction [Start with 200 words introducing the overall topic before subsections]
-      [Write detailed introductory text explaining the importance and context of the research]
-      
-      ## 1.1 Background and Context [250 words]
-      [Provide comprehensive background information with at least 3 citations]
-      
-      ## 1.2 Problem Statement [200 words]
-      [Clearly define the research problem with supporting evidence]
-      
-      ## 1.3 Research Objectives [200 words]
-      [List and explain specific research goals and questions]
-
-      # 2. Literature Review [Start with 200 words introducing the literature review approach]
-      [Write overview text explaining how the literature review was conducted]
-      
-      ## 2.1 Theoretical Background [300 words]
-      [Discuss major theories and frameworks with at least 4 citations]
-      
-      ## 2.2 Current Research [300 words]
-      [Review latest findings with at least 4 citations from 2020-2024]
-      
-      ## 2.3 Research Gaps [200 words]
-      [Identify specific gaps with supporting evidence]
-
-      # 3. Methodology [Start with 200 words introducing the overall methodology]
-      [Write methodology overview explaining the research approach]
-      
-      ## 3.1 Research Design [250 words]
-      [Detail the research design with justification]
-      
-      ## 3.2 Data Collection [250 words]
-      [Explain data collection methods thoroughly]
-      
-      ## 3.3 Analysis Methods [250 words]
-      [Describe analytical techniques in detail]
-
-      # 4. Results [Start with 200 words introducing the results section]
-      [Write overview text introducing the main findings]
-      
-      ## 4.1 Key Findings [300 words]
-      [Present main results with data]
-      
-      ${customizations.includeGraphs ? `## 4.2 Data Visualization [250 words]
-      [Describe graphs and trends in detail]
-      ` : ''}
-      
-      ## 4.3 Analysis [300 words]
-      [Provide in-depth analysis of findings]
-
-      # 5. Discussion [Start with 200 words introducing the discussion section]
-      [Write overview text framing the discussion]
-      
-      ## 5.1 Interpretation [300 words]
-      [Interpret results in context of literature]
-      
-      ## 5.2 Implications [250 words]
-      [Discuss theoretical and practical implications]
-      
-      ## 5.3 Limitations and Future Research [250 words]
-      [Address limitations and future directions]
-
-      # 6. Conclusion [400 words]
-      [Provide a comprehensive conclusion that:
-      - Summarizes key findings
-      - Addresses research objectives
-      - Highlights main contributions
-      - Suggests practical applications]
-
-      # References
-      Important: Provide at least 15 real, recent (2020-2024) academic references in ${citationStyle.toUpperCase()} format. Include:
-      - DOI numbers when available
-      - Full author names
-      - Journal names
-      - Volume/issue numbers
-      - Page numbers
-      Each reference must be cited at least once in the text.
-
-      Additional Requirements:
-      1. Every section must begin with its own introductory text before any subsections
-      2. Include transition sentences between sections and subsections
-      3. Use formal academic language throughout
-      4. Support all claims with citations
-      5. Include in-text citations in proper ${citationStyle.toUpperCase()} format
-      6. Ensure every subsection is fully developed with required word count
-      7. Use clear topic sentences for each paragraph
-      8. Include critical analysis throughout
-      9. Maintain consistent academic tone
-      10. Provide evidence-based arguments
-
-      Important Notes:
-      - Do not use placeholder text
-      - Write complete, detailed content for each section
-      - Include real, verifiable references
-      - Ensure logical flow between sections
-      - Maintain consistent formatting
-    `.trim();
+    const prompt = generatePrompt(topic, citationStyle, customizations);
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4-turbo-preview", // Using GPT-4 Turbo as it's best suited for academic content
+      model: "gpt-4-turbo-preview",
       messages: [
         {
           role: "system",
-          content: "You are an expert academic researcher and writer. Generate a detailed, well-structured research paper with proper citations and academic language."
+          content: "You are an expert academic researcher and writer with extensive experience in writing research papers. Your task is to generate a detailed, well-structured research paper that meets academic standards. Focus on creating original, evidence-based content with proper citations and academic rigor."
         },
         {
           role: "user",
           content: prompt
         }
       ],
-      temperature: 0.7, // Balanced between creativity and accuracy
-      max_tokens: 4000, // Adjust based on your needs
+      temperature: 0.7,
+      max_tokens: 4000,
       top_p: 0.9,
-      frequency_penalty: 0.3, // Encourage some variation in language
-      presence_penalty: 0.3 // Encourage coverage of different aspects
+      frequency_penalty: 0.3,
+      presence_penalty: 0.3,
+      stream: false
     });
 
+    clearTimeout(timeoutId);
+
     if (!completion.choices[0]?.message?.content) {
-      throw new Error('Failed to generate content');
+      return NextResponse.json(
+        { error: 'No content generated' },
+        { status: 500 }
+      );
     }
 
     const fullContent = completion.choices[0].message.content;
-
-    // Create a preview (first 500 words)
     const preview = fullContent.split(' ').slice(0, 500).join(' ') + '...';
 
-    return NextResponse.json({
-      preview,
-      fullContent,
-    });
+    return new NextResponse(
+      JSON.stringify({
+        preview,
+        fullContent,
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
   } catch (error: unknown) {
     console.error('Error generating paper:', error);
     
+    // Handle specific error types
     if (error instanceof Error) {
+      // Check for timeout
+      if (error.name === 'AbortError') {
+        return NextResponse.json(
+          { error: 'Request timed out. Please try again.' },
+          { status: 408 }
+        );
+      }
+      
+      // Handle OpenAI API errors
+      if ((error as any).status === 429) {
+        return NextResponse.json(
+          { error: 'Too many requests. Please try again later.' },
+          { status: 429 }
+        );
+      }
+
+      // Handle token limit errors
+      if (error.message.includes('maximum context length')) {
+        return NextResponse.json(
+          { error: 'Paper length exceeds maximum limit. Please reduce the scope or word count.' },
+          { status: 413 }
+        );
+      }
+
       return NextResponse.json(
         { error: error.message || 'Failed to generate paper' },
         { status: 500 }

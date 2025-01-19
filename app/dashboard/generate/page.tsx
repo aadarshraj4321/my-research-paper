@@ -2752,7 +2752,7 @@ export default function GeneratePage(): React.ReactElement {
   const handleGenerate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setIsGenerating(true);
-
+  
     try {
       const response = await fetch("/api/generate-paper", {
         method: "POST",
@@ -2767,20 +2767,24 @@ export default function GeneratePage(): React.ReactElement {
           },
         }),
       });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to generate paper");
+  
+      const contentType = response.headers.get("content-type");
+      if (!contentType || !contentType.includes("application/json")) {
+        throw new Error("Server returned non-JSON response");
       }
-
+  
       const data = await response.json();
-
+  
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to generate paper");
+      }
+  
       if (!data.fullContent) {
         throw new Error("No content received from the server");
       }
-
+  
       setFullContent(data.fullContent);
-
+  
       // Store paper data in localStorage with error handling
       try {
         const paperData = {
@@ -2791,38 +2795,37 @@ export default function GeneratePage(): React.ReactElement {
         localStorage.setItem('generatedPaper', JSON.stringify(paperData));
       } catch (storageError) {
         console.error('Failed to save to localStorage:', storageError);
-        // Continue execution even if localStorage fails
       }
-
+  
       toast({
         title: "Success!",
         description: "Your research paper has been generated.",
       });
-
+  
       // Proceed with payment only if paper generation was successful
-      const successUrl = `${window.location.origin}/api/payment/success`;
-      const paymentUrl = `https://pmny.in/Cr7qji0hECrG?surl=${encodeURIComponent(successUrl)}`;
-      
-      // Ensure we have content before redirecting to payment
       if (data.fullContent) {
+        const successUrl = `${window.location.origin}/api/payment/success`;
+        const paymentUrl = `https://pmny.in/Cr7qji0hECrG?surl=${encodeURIComponent(successUrl)}`;
         window.location.href = paymentUrl;
       }
-
+  
     } catch (error) {
       console.error('Paper generation error:', error);
       
-      // More specific error messaging based on error type
       let errorMessage = "Failed to generate paper. Please try again.";
+      
       if (error instanceof Error) {
-        if (error.message.includes("No content received")) {
+        if (error.message.includes("non-JSON response")) {
+          errorMessage = "Server communication error. Please try again.";
+        } else if (error.message.includes("No content received")) {
           errorMessage = "The AI model didn't generate any content. Please try again or modify your request.";
-        } else if (error.message.includes("429")) {
+        } else if (error.message.includes("Too many requests")) {
           errorMessage = "Too many requests. Please wait a moment before trying again.";
-        } else if (error.message.includes("413")) {
-          errorMessage = "Your paper request is too large. Please reduce the scope or word count.";
+        } else {
+          errorMessage = error.message;
         }
       }
-
+  
       toast({
         title: "Error",
         description: errorMessage,
