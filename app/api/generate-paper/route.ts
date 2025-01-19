@@ -1622,6 +1622,8 @@
 // app/api/generate-paper/route.ts
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { APIError } from 'openai/error';
+
 
 interface Customizations {
   sections: number;
@@ -1858,12 +1860,13 @@ export async function POST(
       }
       
       // Handle OpenAI API errors
-      if ((error as any).status === 429) {
-        return NextResponse.json(
-          { error: 'Too many requests. Please try again later.' },
-          { status: 429 }
-        );
-      }
+      if (error instanceof APIError) {
+        if (error.status === 429) {
+          return NextResponse.json(
+            { error: 'Too many requests. Please try again later.' },
+            { status: 429 }
+          );
+        }
 
       // Handle token limit errors
       if (error.message.includes('maximum context length')) {
