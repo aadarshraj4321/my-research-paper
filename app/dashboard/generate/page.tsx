@@ -2468,6 +2468,214 @@
 
 
 
+// "use client"
+// import React, { useState, FormEvent } from "react";
+// import { useToast } from "@/hooks/use-toast";
+// import { Card } from "@/components/ui/card";
+// import { BookOpen, Home, FileText, Settings, Sparkles } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { FormState } from "@/app/types/paper";
+// import ResearchForm from "@/app/components/ResearchForm";
+// import PaperDisplay from "@/app/components/PaperDisplay";
+// import Link from 'next/link';
+// // import { useRouter } from 'next/navigation';
+
+// const Header = () => (
+//   <header className="bg-white/80 border-b shadow-sm backdrop-blur-md sticky top-0 z-50">
+//     <nav className="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
+//       <Link href="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
+//         <BookOpen className="w-8 h-8 text-blue-600" />
+//         <span className="text-2xl font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+//           MyResearchPaper
+//         </span>
+//       </Link>
+
+//       <Link href="/">
+//         <Button variant="ghost" className="text-gray-700 hover:bg-gray-100">
+//           <Home className="w-5 h-5 mr-2" />
+//           Home
+//         </Button>
+//       </Link>
+//     </nav>
+//   </header>
+// );
+
+// const EmptyPaperState = () => (
+//   <div className="flex flex-col items-center justify-center h-full min-h-[600px] p-8 text-center">
+//     <div className="relative mb-8">
+//       <FileText className="w-16 h-16 text-gray-300 mb-4" />
+//       <Sparkles className="w-6 h-6 text-blue-500 absolute -top-2 -right-2 animate-pulse" />
+//     </div>
+//     <h3 className="text-xl font-semibold text-gray-800 mb-4">
+//       Ready to Generate Your Paper
+//     </h3>
+//     <p className="text-base text-gray-600 max-w-md mb-8">
+//       Fill out the form with your research details, and watch as AI assists in creating your paper with precise formatting and structure.
+//     </p>
+//     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full max-w-lg">
+//       <div className="flex flex-col items-center p-4 bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl">
+//         <Settings className="w-6 h-6 text-blue-500 mb-2" />
+//         <span className="text-gray-700 text-sm">Customizable Sections</span>
+//       </div>
+//       <div className="flex flex-col items-center p-4 bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl">
+//         <FileText className="w-6 h-6 text-purple-500 mb-2" />
+//         <span className="text-gray-700 text-sm">Multiple Citation Styles</span>
+//       </div>
+//       <div className="flex flex-col items-center p-4 bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl">
+//         <Sparkles className="w-6 h-6 text-emerald-500 mb-2" />
+//         <span className="text-gray-700 text-sm">AI-Powered Content</span>
+//       </div>
+//     </div>
+//   </div>
+// );
+
+// export default function GeneratePage(): React.ReactElement {
+//   const { toast } = useToast();
+//   // const router = useRouter();
+//   const [formState, setFormState] = useState<FormState>({
+//     topic: "",
+//     authorName: "",
+//     citationStyle: "ieee",
+//     sections: 5,
+//     includeGraphs: "no",
+//     minimumWords: 2000,
+//   });
+//   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+//   const [fullContent, setFullContent] = useState<string>("");
+
+
+//   const handleGenerate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+//     e.preventDefault();
+//     setIsGenerating(true);
+  
+//     try {
+//       const response = await fetch("/api/generate-paper", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify({
+//           ...formState,
+//           customizations: {
+//             sections: formState.sections,
+//             includeGraphs: formState.includeGraphs === "yes",
+//             minimumWords: formState.minimumWords,
+//           },
+//         }),
+//       });
+  
+//       if (!response.ok) throw new Error("Generation failed");
+  
+//       const data = await response.json();
+//       setFullContent(data.fullContent);
+  
+//       // Store paper data in localStorage
+//       const paperData = {
+//         fullContent: data.fullContent,
+//         formState: formState
+//       };
+//       localStorage.setItem('generatedPaper', JSON.stringify(paperData));
+  
+//       toast({
+//         title: "Success!",
+//         description: "Your research paper has been generated.",
+//       });
+  
+//       // Redirect to PayU payment page
+//       const successUrl = `${window.location.origin}/api/payment/success`;
+//       window.location.href = `https://pmny.in/Cr7qji0hECrG?surl=${encodeURIComponent(successUrl)}`;
+  
+//     } catch (error) {
+//       console.error(error);
+//       toast({
+//         title: "Error",
+//         description: "Failed to generate paper. Please try again.",
+//         variant: "destructive",
+//       });
+//     } finally {
+//       setIsGenerating(false);
+//     }
+//   };
+
+//   const handleInputChange = (field: keyof FormState, value: string | number): void => {
+//     setFormState((prev) => ({
+//       ...prev,
+//       [field]: value,
+//     }));
+//   };
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+//       <Header />
+
+//       <div className="container mx-auto px-4 py-8">
+//         <div className="max-w-7xl mx-auto">
+//           <div className="flex flex-col items-center mb-12">
+//             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4 text-center">
+//               My Research Paper 
+//             </h1>
+//             <p className="text-xl text-gray-600 text-center max-w-2xl">
+//               Create professional research papers with AI assistance
+//             </p>
+//             <div className="mt-4 w-24 h-1.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse" />
+//           </div>
+
+//           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+//             <div className="lg:col-span-4">
+//               <div className="sticky top-24">
+//                 <Card className="bg-white border border-gray-100 shadow-lg overflow-hidden">
+//                   <div className="bg-gradient-to-r from-gray-50 to-white p-4 border-b">
+//                     <h2 className="text-lg font-semibold text-gray-800">
+//                       Paper Configuration
+//                     </h2>
+//                   </div>
+//                   <ResearchForm
+//                     formState={formState}
+//                     isGenerating={isGenerating}
+//                     onSubmit={handleGenerate}
+//                     onInputChange={handleInputChange}
+//                   />
+//                 </Card>
+//               </div>
+//             </div>
+
+//             <div className="lg:col-span-8">
+//               <Card className="bg-white rounded-xl shadow-lg border border-gray-100 min-h-[600px]">
+//                 {isGenerating ? (
+//                   <div className="flex items-center justify-center h-full">
+//                     <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600" />
+//                   </div>
+//                 ) : fullContent ? (
+//                   <PaperDisplay
+//                     content={fullContent}
+//                     isGenerating={isGenerating}
+//                     paperData={formState}
+//                   />
+//                 ) : (
+//                   <EmptyPaperState />
+//                 )}
+//               </Card>
+//             </div>
+//           </div>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 "use client"
 import React, { useState, FormEvent } from "react";
 import { useToast } from "@/hooks/use-toast";
@@ -2478,7 +2686,6 @@ import { FormState } from "@/app/types/paper";
 import ResearchForm from "@/app/components/ResearchForm";
 import PaperDisplay from "@/app/components/PaperDisplay";
 import Link from 'next/link';
-// import { useRouter } from 'next/navigation';
 
 const Header = () => (
   <header className="bg-white/80 border-b shadow-sm backdrop-blur-md sticky top-0 z-50">
@@ -2531,7 +2738,6 @@ const EmptyPaperState = () => (
 
 export default function GeneratePage(): React.ReactElement {
   const { toast } = useToast();
-  // const router = useRouter();
   const [formState, setFormState] = useState<FormState>({
     topic: "",
     authorName: "",
@@ -2543,17 +2749,17 @@ export default function GeneratePage(): React.ReactElement {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [fullContent, setFullContent] = useState<string>("");
 
-
   const handleGenerate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setIsGenerating(true);
-  
+
     try {
       const response = await fetch("/api/generate-paper", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...formState,
+          topic: formState.topic,
+          citationStyle: formState.citationStyle,
           customizations: {
             sections: formState.sections,
             includeGraphs: formState.includeGraphs === "yes",
@@ -2561,33 +2767,65 @@ export default function GeneratePage(): React.ReactElement {
           },
         }),
       });
-  
-      if (!response.ok) throw new Error("Generation failed");
-  
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to generate paper");
+      }
+
       const data = await response.json();
+
+      if (!data.fullContent) {
+        throw new Error("No content received from the server");
+      }
+
       setFullContent(data.fullContent);
-  
-      // Store paper data in localStorage
-      const paperData = {
-        fullContent: data.fullContent,
-        formState: formState
-      };
-      localStorage.setItem('generatedPaper', JSON.stringify(paperData));
-  
+
+      // Store paper data in localStorage with error handling
+      try {
+        const paperData = {
+          fullContent: data.fullContent,
+          formState: formState,
+          timestamp: new Date().toISOString(),
+        };
+        localStorage.setItem('generatedPaper', JSON.stringify(paperData));
+      } catch (storageError) {
+        console.error('Failed to save to localStorage:', storageError);
+        // Continue execution even if localStorage fails
+      }
+
       toast({
         title: "Success!",
         description: "Your research paper has been generated.",
       });
-  
-      // Redirect to PayU payment page
+
+      // Proceed with payment only if paper generation was successful
       const successUrl = `${window.location.origin}/api/payment/success`;
-      window.location.href = `https://pmny.in/Cr7qji0hECrG?surl=${encodeURIComponent(successUrl)}`;
-  
+      const paymentUrl = `https://pmny.in/Cr7qji0hECrG?surl=${encodeURIComponent(successUrl)}`;
+      
+      // Ensure we have content before redirecting to payment
+      if (data.fullContent) {
+        window.location.href = paymentUrl;
+      }
+
     } catch (error) {
-      console.error(error);
+      console.error('Paper generation error:', error);
+      
+      // More specific error messaging based on error type
+      let errorMessage = "Failed to generate paper. Please try again.";
+      if (error instanceof Error) {
+        if (error.message.includes("No content received")) {
+          errorMessage = "The AI model didn't generate any content. Please try again or modify your request.";
+        } else if (error.message.includes("429")) {
+          errorMessage = "Too many requests. Please wait a moment before trying again.";
+        } else if (error.message.includes("413")) {
+          errorMessage = "Your paper request is too large. Please reduce the scope or word count.";
+        }
+      }
+
       toast({
         title: "Error",
-        description: "Failed to generate paper. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
