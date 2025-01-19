@@ -1618,12 +1618,10 @@
 
 
 
-
 // app/api/generate-paper/route.ts
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { APIError } from 'openai/error';
-
 
 interface Customizations {
   sections: number;
@@ -1762,29 +1760,13 @@ WRITING REQUIREMENTS:
 7. Follow proper academic writing conventions
 8. Provide detailed methodology
 9. Include research limitations
-10. Maintain objective tone
-
-ADDITIONAL GUIDELINES:
-- No placeholder text
-- Fully developed sections
-- Logical transitions between sections
-- Evidence-based arguments
-- Clear and concise writing
-- Proper paragraph structure
-- Academic vocabulary
-- Consistent terminology
-- Balanced perspective
-- Critical analysis throughout
-
-Note: Focus on creating original, well-researched content that contributes to the academic discourse in the field. Ensure all claims are properly supported with recent references and maintain a scholarly tone throughout the paper.
-`;
+10. Maintain objective tone`;
 }
 
 export async function POST(
   req: Request
 ): Promise<NextResponse<PaperResponse | ErrorResponse>> {
   try {
-    // Add request timeout
     const timeoutMs = 180000; // 3 minutes
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -1817,8 +1799,7 @@ export async function POST(
       max_tokens: 4000,
       top_p: 0.9,
       frequency_penalty: 0.3,
-      presence_penalty: 0.3,
-      stream: false
+      presence_penalty: 0.3
     });
 
     clearTimeout(timeoutId);
@@ -1833,25 +1814,20 @@ export async function POST(
     const fullContent = completion.choices[0].message.content;
     const preview = fullContent.split(' ').slice(0, 500).join(' ') + '...';
 
-    return new NextResponse(
-      JSON.stringify({
-        preview,
-        fullContent,
-      }),
-      {
-        status: 200,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }
-    );
+    return NextResponse.json({
+      preview,
+      fullContent,
+    }, {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
   } catch (error: unknown) {
     console.error('Error generating paper:', error);
     
-    // Handle specific error types
     if (error instanceof Error) {
-      // Check for timeout
       if (error.name === 'AbortError') {
         return NextResponse.json(
           { error: 'Request timed out. Please try again.' },
@@ -1859,7 +1835,6 @@ export async function POST(
         );
       }
       
-      // Handle OpenAI API errors
       if (error instanceof APIError) {
         if (error.status === 429) {
           return NextResponse.json(
@@ -1868,12 +1843,19 @@ export async function POST(
           );
         }
 
-      // Handle token limit errors
-      if (error.message.includes('maximum context length')) {
-        return NextResponse.json(
-          { error: 'Paper length exceeds maximum limit. Please reduce the scope or word count.' },
-          { status: 413 }
-        );
+        if (error.status === 400) {
+          return NextResponse.json(
+            { error: 'Invalid request parameters. Please check your input.' },
+            { status: 400 }
+          );
+        }
+
+        if (error.status === 401) {
+          return NextResponse.json(
+            { error: 'Authentication error. Please check your API key.' },
+            { status: 401 }
+          );
+        }
       }
 
       return NextResponse.json(
