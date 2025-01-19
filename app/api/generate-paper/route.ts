@@ -1613,13 +1613,11 @@
 
 
 
-
-// route
-
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { ChatCompletionMessageParam } from 'openai/resources/chat/completions';
 
+// Match frontend types
 interface Customizations {
   sections: number;
   includeGraphs: boolean;
@@ -1635,250 +1633,137 @@ interface PaperRequestBody {
 interface PaperResponse {
   preview: string;
   fullContent: string;
-}
-
-interface ErrorResponse {
-  error: string;
+  status: 'success' | 'error';
+  message?: string;
 }
 
 const openai = new OpenAI({
-  apiKey: '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',
+  apiKey: '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',  // Ensure you have this in .env
 });
-
-const generateResearchPrompt = (
-  topic: string, 
-  citationStyle: string, 
-  customizations: Customizations
-): ChatCompletionMessageParam[] => {
-  const basePrompt = `
-You are a professional academic researcher writing a completely original research paper. Create a comprehensive, plagiarism-free paper on "${topic}" following this exact structure. Each section must be unique and written in your own academic voice.
-
-CRITICAL REQUIREMENTS:
-- Generate 100% original content with unique insights and analysis
-- Avoid common phrases and generic academic language
-- Create novel connections between existing research
-- Develop unique arguments supported by diverse sources
-- Use your own voice while maintaining academic rigor
-
-FORMAT SPECIFICATIONS:
-- Citation Style: ${citationStyle.toUpperCase()}
-- Minimum Words: ${customizations.minimumWords}
-- Use clear hierarchical heading structure (# for main sections, ## for subsections)
-- Include detailed transitions between all sections
-${customizations.includeGraphs ? '- Incorporate original data visualization descriptions' : ''}
-
-PAPER STRUCTURE:
-
-# The Title
-[Create a unique, specific academic title that precisely describes the research focus and contribution]
-
-# Abstract
-[Craft a 300-word structured abstract including:
-• Novel research context and background
-• Specific problem statement
-• Methodological approach
-• Key findings and insights
-• Original conclusions and implications]
-
-# 1. Introduction
-[Write a compelling 200-word introduction that establishes the unique angle of this research]
-
-## 1.1 Background and Context
-[Develop original background analysis with at least 3 diverse citations, 250 words]
-
-## 1.2 Problem Statement
-[Articulate a precise research problem with supporting evidence, 200 words]
-
-## 1.3 Research Objectives
-[Define specific, measurable research goals and questions, 200 words]
-
-# 2. Literature Review
-[Present a unique synthesis of existing research, 200 words introduction]
-
-## 2.1 Theoretical Background
-[Analyze major theories with original insights, minimum 4 citations, 300 words]
-
-## 2.2 Current Research Landscape
-[Synthesize recent findings with original analysis, minimum 4 recent citations (2020-2024), 300 words]
-
-## 2.3 Research Gaps
-[Identify unique gaps with evidence-based reasoning, 200 words]
-
-# 3. Methodology
-[Describe your original research approach, 200 words introduction]
-
-## 3.1 Research Design
-[Detail your unique methodological framework, 250 words]
-
-## 3.2 Data Collection
-[Explain your specific data collection methods, 250 words]
-
-## 3.3 Analysis Methods
-[Describe your analytical techniques in detail, 250 words]
-
-# 4. Results
-[Present your findings clearly, 200 words introduction]
-
-## 4.1 Key Findings
-[Report detailed results with supporting data, 300 words]
-
-${customizations.includeGraphs ? `## 4.2 Data Visualization
-[Describe original visual representations of data, 250 words]
-` : ''}
-
-## 4.3 Analysis
-[Provide in-depth interpretation of findings, 300 words]
-
-# 5. Discussion
-[Frame your original contributions, 200 words introduction]
-
-## 5.1 Interpretation
-[Offer novel interpretations of results, 300 words]
-
-## 5.2 Implications
-[Discuss unique theoretical and practical implications, 250 words]
-
-## 5.3 Limitations and Future Research
-[Address constraints and future directions, 250 words]
-
-# 6. Conclusion
-[Craft a comprehensive 400-word conclusion that:
-• Synthesizes key findings
-• Addresses research objectives
-• Highlights original contributions
-• Suggests practical applications]
-
-# References
-[Provide minimum 15 recent (2020-2024) academic references in ${citationStyle.toUpperCase()} format, including:
-• DOI numbers where available
-• Complete author names
-• Full journal names
-• Volume/issue numbers
-• Page ranges
-Each reference must be cited distinctly in the text]
-
-ADDITIONAL REQUIREMENTS:
-1. Write distinct introductory paragraphs for each major section
-2. Create smooth transitions between all sections
-3. Maintain formal academic tone while using original language
-4. Support all assertions with properly formatted citations
-5. Follow ${citationStyle.toUpperCase()} citation style precisely
-6. Meet word count requirements for each section
-7. Begin each paragraph with clear topic sentences
-8. Include critical analysis throughout
-9. Use original academic voice consistently
-10. Present evidence-based arguments
-
-ENSURE:
-- Every sentence is original and unique
-- Each section flows logically to the next
-- All content is properly cited
-- Headers are properly formatted
-- Content is academically rigorous while being original`.trim();
-
-  return [
-    {
-      role: "system" as const,
-      content: "You are a distinguished academic researcher creating completely original research papers. Generate unique, plagiarism-free content with proper academic rigor and novel insights. Follow the exact structure provided while maintaining originality throughout."
-    },
-    {
-      role: "user" as const,
-      content: basePrompt
-    }
-  ];
-};
-
-const validatePaperStructure = (content: string): boolean => {
-  const requiredSections = [
-    'Abstract',
-    'Introduction',
-    'Literature Review',
-    'Methodology',
-    'Results',
-    'Discussion',
-    'Conclusion',
-    'References'
-  ];
-
-  return requiredSections.every(section => content.includes(section));
-};
-
-const formatCitations = (content: string, citationStyle: string): string => {
-  let formattedContent = content;
-
-  // Format in-text citations
-  formattedContent = formattedContent.replace(
-    /\(([^)]+), (\d{4})\)/g,
-    (match, author, year) => {
-      return citationStyle.toUpperCase() === 'APA' 
-        ? `(${author}, ${year})` 
-        : `[${author} ${year}]`;
-    }
-  );
-
-  return formattedContent;
-};
 
 export async function POST(
   req: Request
-): Promise<NextResponse<PaperResponse | ErrorResponse>> {
+): Promise<NextResponse> {
   try {
-    const { topic, citationStyle, customizations }: PaperRequestBody = await req.json();
+    // Input validation
+    if (!process.env.OPENAI_API_KEY) {
+      return NextResponse.json(
+        { 
+          status: 'error',
+          error: 'OpenAI API key is not configured' 
+        },
+        { status: 500 }
+      );
+    }
+
+    const body = await req.json();
+    const { topic, citationStyle, customizations } = body as PaperRequestBody;
 
     if (!topic || !citationStyle || !customizations) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { 
+          status: 'error',
+          error: 'Missing required fields' 
+        },
         { status: 400 }
       );
     }
 
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4",
-      messages: generateResearchPrompt(topic, citationStyle, customizations),
-      temperature: 0.7,
-      max_tokens: 4000,
-      presence_penalty: 0.6,
-      frequency_penalty: 0.8
-    });
-
-    let fullContent = completion.choices[0]?.message?.content;
-
-    if (!fullContent) {
-      throw new Error('Generated content is empty');
-    }
-
-    // Validate content structure
-    if (!validatePaperStructure(fullContent)) {
-      throw new Error('Generated content missing required sections');
-    }
-
-    // Format citations and clean up content
-    fullContent = formatCitations(fullContent, citationStyle);
-    fullContent = fullContent
-      .replace(/\n{3,}/g, '\n\n')
-      .replace(/\s+#/g, '\n\n#')
-      .trim();
-
-    // Create preview
-    const preview = fullContent.split(' ').slice(0, 500).join(' ') + '...';
-
-    return NextResponse.json({
-      preview,
-      fullContent,
-    });
-
-  } catch (error: unknown) {
-    console.error('Error generating paper:', error);
-    
-    if (error instanceof Error) {
+    // Validate word count
+    if (customizations.minimumWords > 10000) {
       return NextResponse.json(
-        { error: error.message || 'Failed to generate paper' },
+        {
+          status: 'error',
+          error: 'Word count exceeds maximum limit of 10,000'
+        },
+        { status: 400 }
+      );
+    }
+
+    const messages: ChatCompletionMessageParam[] = [
+      {
+        role: "system",
+        content: "You are a professional academic researcher creating original research papers."
+      },
+      {
+        role: "user",
+        content: `Create a research paper on "${topic}" with:
+          - Citation style: ${citationStyle}
+          - Minimum words: ${customizations.minimumWords}
+          - Sections: ${customizations.sections}
+          ${customizations.includeGraphs ? '- Include data visualization descriptions' : ''}
+          
+          Follow academic structure with Abstract, Introduction, Literature Review, Methodology, Results, Discussion, and Conclusion.`
+      }
+    ];
+
+    try {
+      const completion = await openai.chat.completions.create({
+        model: "gpt-4",
+        messages,
+        temperature: 0.7,
+        max_tokens: 4000,
+        presence_penalty: 0.6,
+        frequency_penalty: 0.8
+      });
+
+      const fullContent = completion.choices[0]?.message?.content;
+
+      if (!fullContent) {
+        throw new Error('No content generated');
+      }
+
+      // Create preview
+      const preview = fullContent.split(' ').slice(0, 500).join(' ') + '...';
+
+      return NextResponse.json({
+        status: 'success',
+        preview,
+        fullContent,
+      });
+
+    } catch (openaiError) {
+      console.error('OpenAI API Error:', openaiError);
+      
+      if (openaiError instanceof Error) {
+        // Handle specific OpenAI errors
+        if (openaiError.message.includes('Rate limit')) {
+          return NextResponse.json(
+            { 
+              status: 'error',
+              error: 'Rate limit exceeded. Please try again in a moment.' 
+            },
+            { status: 429 }
+          );
+        }
+        
+        if (openaiError.message.includes('Invalid API key')) {
+          return NextResponse.json(
+            { 
+              status: 'error',
+              error: 'Service configuration error. Please contact support.' 
+            },
+            { status: 500 }
+          );
+        }
+      }
+
+      return NextResponse.json(
+        { 
+          status: 'error',
+          error: 'Failed to generate paper content. Please try again.' 
+        },
         { status: 500 }
       );
     }
-    
+
+  } catch (error) {
+    console.error('Server Error:', error);
     return NextResponse.json(
-      { error: 'An unknown error occurred' },
+      { 
+        status: 'error',
+        error: 'An unexpected error occurred. Please try again.' 
+      },
       { status: 500 }
     );
   }
