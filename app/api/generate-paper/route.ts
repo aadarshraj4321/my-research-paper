@@ -1793,7 +1793,7 @@ ENSURE:
 `.trim();
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",  // Using GPT-4 for higher quality and originality
+      model: "gpt-4-turbo-preview",  // Using GPT-4 for higher quality and originality
       messages: [
         {
           role: "system",
