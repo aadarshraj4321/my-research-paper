@@ -1714,6 +1714,7 @@ const parseOpenAIResponse = (content: string): StructuredPaper => {
       references: parsed.references
     };
   } catch (error) {
+    console.log(error);
     throw new Error('Failed to parse OpenAI response into structured format');
   }
 };
