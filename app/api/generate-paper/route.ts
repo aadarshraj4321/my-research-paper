@@ -1637,6 +1637,7 @@ interface PaperRequestBody {
 //   message?: string;
 // }
 
+const OpenAIKey='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'
 const openai = new OpenAI({
   apiKey: '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',  // Ensure you have this in .env
 });
@@ -1646,7 +1647,7 @@ export async function POST(
 ): Promise<NextResponse> {
   try {
     // Input validation
-    if (!process.env.OPENAI_API_KEY) {
+    if (!OpenAIKey) {
       return NextResponse.json(
         { 
           status: 'error',
