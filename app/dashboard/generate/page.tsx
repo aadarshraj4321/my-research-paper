@@ -2975,9 +2975,14 @@ export default function GeneratePage(): React.ReactElement {
     setIsGenerating(true);
   
     try {
-      const response = await fetch("/api/generate-paper", {
+      // Replace with your Cloud Function URL
+      const CLOUD_FUNCTION_URL = "https://us-central1-helpstudent-250e9.cloudfunctions.net/generate-paper";
+      
+      const response = await fetch(CLOUD_FUNCTION_URL, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify({
           ...formState,
           customizations: {
@@ -2993,7 +2998,7 @@ export default function GeneratePage(): React.ReactElement {
       const data = await response.json();
       setFullContent(data.fullContent);
   
-      // Store paper data in localStorage
+      // Store paper data
       const paperData = {
         fullContent: data.fullContent,
         formState: formState
@@ -3005,7 +3010,7 @@ export default function GeneratePage(): React.ReactElement {
         description: "Your research paper has been generated.",
       });
   
-      // Redirect to PayU payment page
+      // PayU redirect
       const successUrl = `${window.location.origin}/api/payment/success`;
       window.location.href = `https://pmny.in/Cr7qji0hECrG?surl=${encodeURIComponent(successUrl)}`;
   
