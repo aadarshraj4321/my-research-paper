@@ -786,7 +786,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-white to-slate-50 dark:from-gray-900 dark:to-gray-950 relative overflow-hidden">
-      {/* <ParticleBackground /> */}
+      <ParticleBackground />
       <div className="relative z-10">
         <Header />
 
