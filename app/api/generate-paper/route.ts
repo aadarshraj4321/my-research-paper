@@ -1786,7 +1786,7 @@ export async function POST(
     `.trim();
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo", // Using GPT-4 Turbo for best research paper generation
+      model: "gpt-4", // Using GPT-4 Turbo for best research paper generation
       messages: [
         {
           role: "system",

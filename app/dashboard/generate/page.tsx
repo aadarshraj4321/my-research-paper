@@ -2686,7 +2686,6 @@ import { FormState } from "@/app/types/paper";
 import ResearchForm from "@/app/components/ResearchForm";
 import PaperDisplay from "@/app/components/PaperDisplay";
 import Link from 'next/link';
-// import { useRouter } from 'next/navigation';
 
 const Header = () => (
   <header className="bg-white/80 border-b shadow-sm backdrop-blur-md sticky top-0 z-50">
@@ -2739,7 +2738,6 @@ const EmptyPaperState = () => (
 
 export default function GeneratePage(): React.ReactElement {
   const { toast } = useToast();
-  // const router = useRouter();
   const [formState, setFormState] = useState<FormState>({
     topic: "",
     authorName: "",
@@ -2751,17 +2749,17 @@ export default function GeneratePage(): React.ReactElement {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [fullContent, setFullContent] = useState<string>("");
 
-
   const handleGenerate = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     setIsGenerating(true);
-  
+
     try {
       const response = await fetch("/api/generate-paper", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...formState,
+          topic: formState.topic,
+          citationStyle: formState.citationStyle,
           customizations: {
             sections: formState.sections,
             includeGraphs: formState.includeGraphs === "yes",
@@ -2769,33 +2767,65 @@ export default function GeneratePage(): React.ReactElement {
           },
         }),
       });
-  
-      if (!response.ok) throw new Error("Generation failed");
-  
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to generate paper");
+      }
+
       const data = await response.json();
+
+      if (!data.fullContent) {
+        throw new Error("No content received from the server");
+      }
+
       setFullContent(data.fullContent);
-  
-      // Store paper data in localStorage
-      const paperData = {
-        fullContent: data.fullContent,
-        formState: formState
-      };
-      localStorage.setItem('generatedPaper', JSON.stringify(paperData));
-  
+
+      // Store paper data in localStorage with error handling
+      try {
+        const paperData = {
+          fullContent: data.fullContent,
+          formState: formState,
+          timestamp: new Date().toISOString(),
+        };
+        localStorage.setItem('generatedPaper', JSON.stringify(paperData));
+      } catch (storageError) {
+        console.error('Failed to save to localStorage:', storageError);
+        // Continue execution even if localStorage fails
+      }
+
       toast({
         title: "Success!",
         description: "Your research paper has been generated.",
       });
-  
-      // Redirect to PayU payment page
+
+      // Proceed with payment only if paper generation was successful
       const successUrl = `${window.location.origin}/api/payment/success`;
-      window.location.href = `https://pmny.in/Cr7qji0hECrG?surl=${encodeURIComponent(successUrl)}`;
-  
+      const paymentUrl = `https://pmny.in/Cr7qji0hECrG?surl=${encodeURIComponent(successUrl)}`;
+      
+      // Ensure we have content before redirecting to payment
+      if (data.fullContent) {
+        window.location.href = paymentUrl;
+      }
+
     } catch (error) {
-      console.error(error);
+      console.error('Paper generation error:', error);
+      
+      // More specific error messaging based on error type
+      let errorMessage = "Failed to generate paper. Please try again.";
+      if (error instanceof Error) {
+        if (error.message.includes("No content received")) {
+          errorMessage = "The AI model didn't generate any content. Please try again or modify your request.";
+        } else if (error.message.includes("429")) {
+          errorMessage = "Too many requests. Please wait a moment before trying again.";
+        } else if (error.message.includes("413")) {
+          errorMessage = "Your paper request is too large. Please reduce the scope or word count.";
+        }
+      }
+
       toast({
         title: "Error",
-        description: "Failed to generate paper. Please try again.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
