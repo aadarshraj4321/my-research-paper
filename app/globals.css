@@ -1,10 +1,9 @@
-/* ./styles/globals.css */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 html {
-  background-color: #f0f0f0; /* Just an extra test to see if CSS is working */
+  background-color: #f0f0f0; 
 }
 
 
@@ -12,16 +11,16 @@ html {
 
 
 .select-text {
-  text-align: justify; /* Ensures text is justified */
-  user-select: text; /* Allow text to be selected */
+  text-align: justify; 
+  user-select: text; 
 }
 
 .text-gray-700 {
-  line-height: 1.8; /* Adjust line height for better spacing between sentences */
+  line-height: 1.8; 
 }
 
 .prose {
-  margin-bottom: 1.5rem; /* Adds margin between sections */
+  margin-bottom: 1.5rem; 
 }
 
 
@@ -30,7 +29,6 @@ html {
 
 
 
-/* Ensure Times New Roman font is used for the entire paper */
 
 body, .paper-content {
   font-family: 'Times New Roman', Times, serif;
@@ -40,35 +38,30 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-/* Make sure the content is justified */
 .select-text {
   text-align: justify;
-  line-height: 1.8; /* Adjust line height for better spacing between sentences */
-  margin-bottom: 1.5rem; /* Add margin between sections */
+  line-height: 1.8; 
+  margin-bottom: 1.5rem; 
 }
 
-/* List and bullet points styling */
 ul, ol {
-  margin-left: 2rem; /* Indent the lists */
+  margin-left: 2rem; 
 }
 
 li {
-  margin-bottom: 0.5rem; /* Add some space between list items */
+  margin-bottom: 0.5rem;
 }
 
-/* Make paragraphs and sections easier to read */
 .prose p {
-  margin-bottom: 1rem; /* Add space between paragraphs */
+  margin-bottom: 1rem; 
 }
 
-/* Headings */
 h1, h2, h3, h4, h5, h6 {
-  margin-bottom: 1rem; /* Space below headings */
+  margin-bottom: 1rem; 
   font-family: 'Times New Roman', Times, serif;
   font-weight: bold;
 }
 
-/* Ensure images and figures are centered with some space around them */
 figure {
   margin: 2rem auto;
   text-align: center;
@@ -80,7 +73,6 @@ figcaption {
   margin-top: 1rem;
 }
 
-/* Fix for quotes, code blocks, etc. */
 blockquote, code {
   font-family: 'Times New Roman', Times, serif;
   font-style: italic;
