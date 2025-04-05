@@ -1,4 +1,3 @@
-// utils/documentExport.ts
 import { jsPDF } from 'jspdf';
 import { Document, Packer, Paragraph, HeadingLevel, TextRun } from 'docx';
 import { saveAs } from 'file-saver';
@@ -18,19 +17,15 @@ export const exportToPDF = async (options: ExportOptions) => {
     format: 'a4'
   });
 
-  // Set fonts
   pdf.setFont("times", "normal");
   
-  // Title
   pdf.setFontSize(24);
   pdf.text(title, pdf.internal.pageSize.width / 2, 80, { align: 'center' });
   
-  // Author and Date
   pdf.setFontSize(12);
   pdf.text(authorName, pdf.internal.pageSize.width / 2, 120, { align: 'center' });
   pdf.text(date, pdf.internal.pageSize.width / 2, 140, { align: 'center' });
 
-  // Content
   pdf.setFontSize(11);
   const splitContent = content.split('\n\n');
   let yPos = 180;
@@ -39,7 +34,6 @@ export const exportToPDF = async (options: ExportOptions) => {
 
   for (const section of splitContent) {
     if (section.startsWith('#')) {
-      // Handle headings
       const level = (section.match(/^#+/) || [''])[0].length;
       const text = section.replace(/^#+\s/, '');
       pdf.setFontSize(16 - level);
@@ -56,7 +50,6 @@ export const exportToPDF = async (options: ExportOptions) => {
       pdf.setFont("times", "normal");
       pdf.setFontSize(11);
     } else {
-      // Handle paragraphs
       const lines = pdf.splitTextToSize(section, pageWidth);
       
       if (yPos + (lines.length * 15) > pdf.internal.pageSize.height - margin) {
@@ -78,7 +71,6 @@ export const exportToWord = async (options: ExportOptions) => {
   const sections = content.split('\n\n');
   const docChildren = [];
 
-  // Title
   docChildren.push(
     new Paragraph({
       text: title,
@@ -88,7 +80,6 @@ export const exportToWord = async (options: ExportOptions) => {
     })
   );
 
-  // Author & Date
   docChildren.push(
     new Paragraph({
       children: [new TextRun(authorName)],
@@ -102,7 +93,6 @@ export const exportToWord = async (options: ExportOptions) => {
     })
   );
 
-  // Helper function to convert markdown heading level to DocX heading level
   const getHeadingLevel = (level: number) => {
     switch (level) {
       case 1: return HeadingLevel.HEADING_1;
@@ -114,7 +104,6 @@ export const exportToWord = async (options: ExportOptions) => {
     }
   };
 
-  // Content
   for (const section of sections) {
     if (section.startsWith('#')) {
       const level = (section.match(/^#+/) || [''])[0].length;
